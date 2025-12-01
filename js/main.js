@@ -1,4 +1,4 @@
-// Progress tracker
+      // Progress tracker (not used in UI anymore, kept for future hooks)
       const progressGoals = new Set([
         "drop1",
         "drop2",
@@ -15,17 +15,9 @@
         "t5",
       ]);
       const progressState = {};
-      const scoreValue = document.getElementById("scoreValue");
-      const scoreTotal = document.getElementById("scoreTotal");
-      const scoreFill = document.getElementById("scoreFill");
-      scoreTotal.textContent = progressGoals.size;
       function markDone(key) {
         if (!progressGoals.has(key) || progressState[key]) return;
         progressState[key] = true;
-        const done = Object.keys(progressState).length;
-        const percent = Math.round((done / progressGoals.size) * 100);
-        scoreValue.textContent = done;
-        scoreFill.style.width = percent + "%";
       }
       // Modal helpers
       const modal = document.getElementById("appModal");
