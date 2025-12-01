@@ -1,977 +1,567 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Termokimia: Eksoterm &amp; Endoterm</title>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Baloo+2:wght@500;600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg1: #f7ef6a;   /* fresh */
-      --bg2: #dfdce3;   /* clean */
-      --bg3: #93c178;   /* vermillion */
-      --primary: #eac67a;   /* warm yellow */
-      --secondary: #465c8b; /* sunshine */
-      --accent: #984b43;    /* rusty red */
-      --soft: #93c178;      /* green accent */
-      --text: #18121e;      /* navy */
-      --card: rgba(255, 255, 255, 0.9);
-      --shadow: 0 18px 50px rgba(24, 18, 30, 0.12);
-    }
-    body.endo-mode {
-      --primary: #465c8b;   /* cool mode */
-      --secondary: #233237; /* gunmetal */
-      --accent: #f7ef6a;    /* bright highlight */
-      --soft: #eac67a;
-      --bg1: #e1e7f3;
-      --bg2: #dfdce3;
-      --bg3: #93c178;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: 'Fredoka', 'Baloo 2', system-ui, -apple-system, sans-serif;
-      background: radial-gradient(circle at 10% 20%, var(--bg1), transparent 30%),
-                  radial-gradient(circle at 90% 10%, var(--bg2), transparent 35%),
-                  radial-gradient(circle at 50% 90%, var(--bg3), transparent 35%),
-                  linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
-      background-size: 160% 160%;
-      animation: moveBg 14s ease infinite;
-      color: var(--text);
-      line-height: 1.6;
-    }
-    @keyframes moveBg {
-      0% { background-position: 0% 0%, 100% 0%, 50% 100%, 0 0; }
-      50% { background-position: 30% 10%, 80% 20%, 60% 80%, 100% 100%; }
-      100% { background-position: 0% 0%, 100% 0%, 50% 100%, 0 0; }
-    }
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 12;
-      backdrop-filter: blur(10px);
-      background: rgba(255, 255, 255, 0.8);
-      border-bottom: 2px solid #eac67a;
-    }
-    nav {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-auto-flow: column;
-      grid-auto-columns: minmax(120px, 1fr);
-      gap: 10px;
-      padding: 12px 16px;
-      align-items: center;
-    }
-    nav a {
-      text-decoration: none;
-      color: #18121e;
-      background: #fff;
-      padding: 10px 14px;
-      border-radius: 14px;
-      font-weight: 700;
-      border: 2px solid #eac67a;
-      box-shadow: 0 6px 0 #c59a54;
-      text-align: center;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s;
-    }
-    nav a:hover {
-      transform: translateY(-2px);
-      background: #f2efdf;
-      box-shadow: 0 10px 0 #c59a54;
-    }
-    .hero {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 46px 18px 32px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 26px;
-      align-items: center;
-    }
-    .hero-text h1 {
-      font-size: clamp(34px, 6vw, 54px);
-      margin: 10px 0 12px;
-      color: var(--primary);
-      text-shadow: 4px 4px 0 rgba(255, 255, 255, 0.6);
-      letter-spacing: -0.8px;
-    }
-    .hero-text p {
-      margin: 0 0 16px;
-      font-size: 18px;
-    }
-    .badge-age {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 12px;
-      background: #fff;
-      border-radius: 16px;
-      border: 2px dashed var(--soft);
-      color: #18121e;
-      font-weight: 700;
-      box-shadow: var(--shadow);
-    }
-    .cta-buttons {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 14px;
-    }
-    .btn {
-      padding: 12px 18px;
-      border-radius: 16px;
-      border: none;
-      cursor: pointer;
-      font-weight: 800;
-      font-size: 16px;
-      color: #18121e;
-      background: #fff;
-      border: 2px solid #233237;
-      box-shadow: 0 12px 0 rgba(0,0,0,0.08);
-      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s;
-    }
-    .btn.primary { background: var(--primary); color: #18121e; border-color: #c59a54; }
-    .btn.secondary { background: var(--secondary); color: #fff; border-color: #93a2c8; }
-    .btn.ghost { background: #fff; }
-    .btn:hover { transform: translateY(-2px); box-shadow: 0 14px 0 rgba(0,0,0,0.08); }
-    .btn:active { transform: translateY(0); }
-    .hero-visual {
-      position: relative;
-      padding: 22px;
-      border-radius: 26px;
-      background: linear-gradient(145deg, #fff, rgba(255,255,255,0.7));
-      border: 3px solid #18121e;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-    .hero-visual::before, .hero-visual::after {
-      content: "";
-      position: absolute;
-      width: 160px;
-      height: 160px;
-      border-radius: 50%;
-      filter: blur(30px);
-      opacity: 0.5;
-      animation: floaty 8s ease-in-out infinite;
-    }
-    .hero-visual::before { background: var(--accent); top: -40px; right: -30px; }
-    .hero-visual::after { background: var(--secondary); bottom: -40px; left: -20px; animation-delay: 1s; }
-    @keyframes floaty {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-12px); }
-      100% { transform: translateY(0); }
-    }
-    .thermo-card {
-      position: relative;
-      z-index: 2;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 14px;
-    }
-    .mini-card {
-      background: rgba(255,255,255,0.9);
-      border: 2px solid #18121e;
-      border-radius: 18px;
-      padding: 12px;
-      box-shadow: 0 8px 0 rgba(0,0,0,0.08);
-    }
-    .mini-card strong { display: block; font-size: 16px; }
-    .meter {
-      background: #f8fbff;
-      border: 2px solid #18121e;
-      border-radius: 12px;
-      height: 14px;
-      overflow: hidden;
-      position: relative;
-    }
-    .meter span {
-      display: block;
-      height: 100%;
-      width: 50%;
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
-      transition: width 0.4s ease;
-    }
-    .section {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 32px 18px;
-    }
-    .section h2 {
-      margin: 0 0 12px;
-      font-size: 28px;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--primary);
-      text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.7);
-    }
-    .pill-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 12px;
-      border-radius: 14px;
-      background: #fff;
-      border: 2px solid #eac67a;
-      font-weight: 700;
-      margin-bottom: 10px;
-      color: #18121e;
-      box-shadow: var(--shadow);
-    }
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 16px;
-      margin-top: 12px;
-    }
-    .card {
-      background: var(--card);
-      border-radius: 18px;
-      padding: 16px;
-      border: 3px solid #18121e;
-      box-shadow: 0 12px 0 rgba(0,0,0,0.08);
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-    }
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 16px 0 rgba(0,0,0,0.08);
-    }
-    .card .big-icon {
-      width: 46px;
-      height: 46px;
-      border-radius: 16px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      background: #f7f2d4;
-      border: 2px solid #18121e;
-      margin-bottom: 8px;
-    }
-    .flip-card { cursor: pointer; perspective: 900px; }
-    .flip-inner {
-      position: relative;
-      width: 100%;
-      min-height: 170px;
-      transition: transform 0.6s;
-      transform-style: preserve-3d;
-    }
-    .flip-inner.flip { transform: rotateY(180deg); }
-    .flip-face {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 14px;
-      border: 3px solid #18121e;
-      display: grid;
-      place-items: center;
-      padding: 12px;
-      text-align: center;
-      font-weight: 700;
-      background: #fff;
-    }
-    .flip-face.back {
-      transform: rotateY(180deg);
-      background: #f7f2d4;
-    }
-    .mini-lesson {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 16px;
-      margin-top: 12px;
-    }
-    .info-list {
-      padding-left: 0;
-      list-style: none;
-    }
-    .info-list li {
-      margin-bottom: 8px;
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      font-size: 16px;
-    }
-    .bubble-icon {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      color: #18121e;
-      font-weight: 800;
-      background: #f7f2d4;
-      border: 2px solid #18121e;
-    }
-    .diagram {
-      background: #fff;
-      border-radius: 18px;
-      border: 3px solid #18121e;
-      padding: 14px;
-      box-shadow: 0 8px 0 #bde0fe;
-    }
-    .energy-play {
-      margin-top: 10px;
-      background: #f3f8ff;
-      border: 2px dashed #18121e;
-      border-radius: 14px;
-      padding: 12px;
-    }
-    .energy-play input[type="range"] {
-      width: 100%;
-      accent-color: var(--primary);
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 12px;
-      background: #fff;
-      border-radius: 14px;
-      overflow: hidden;
-      border: 3px solid #18121e;
-    }
-    th, td {
-      padding: 10px;
-      border: 2px dashed #eac67a;
-      text-align: center;
-    }
-    th { background: #eac67a; }
-    .chant {
-      margin-top: 10px;
-      padding: 12px 14px;
-      border-radius: 16px;
-      background: #e3f2e7;
-      border: 2px solid #8df2c5;
-      font-weight: 700;
-    }
-    .activities {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 14px;
-      margin-top: 12px;
-    }
-    .activity {
-      background: #fff;
-      border-radius: 18px;
-      border: 3px solid #18121e;
-      padding: 14px;
-      box-shadow: 0 8px 0 #eac67a;
-    }
-    .drag-items, .drop-zones {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .chip {
-      padding: 9px 12px;
-      border-radius: 14px;
-      background: #e1e7f3;
-      border: 2px solid #18121e;
-      font-weight: 700;
-      cursor: grab;
-    }
-    .drop-zone {
-      flex: 1 1 45%;
-      min-height: 60px;
-      background: #f7f2d4;
-      border: 2px dashed #18121e;
-      border-radius: 14px;
-      padding: 8px;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      font-weight: 700;
-      transition: background 0.2s, border-color 0.2s;
-    }
-    .drop-zone.correct { background: #dbead3; border-color: #5f8f4b; }
-    .choice-buttons {
-      display: grid;
-      gap: 8px;
-      margin-top: 8px;
-    }
-    .choice-buttons button {
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 3px solid #18121e;
-      background: #f3f7ff;
-      font-weight: 800;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .choice-buttons button.correct { background: #dbead3; }
-    .choice-buttons button.wrong { background: #f0c4b8; }
-    .story-box {
-      background: #fff;
-      border-radius: 18px;
-      border: 3px solid #18121e;
-      padding: 16px;
-      box-shadow: 0 8px 0 #bde0fe;
-    }
-    .questions { margin-top: 10px; display: grid; gap: 8px; }
-    .questions button {
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 3px solid #18121e;
-      background: #f7f2d4;
-      font-weight: 800;
-      cursor: pointer;
-    }
-    .quiz {
-      background: #fff;
-      border-radius: 18px;
-      border: 3px solid #18121e;
-      padding: 14px;
-      box-shadow: 0 8px 0 #eac67a;
-      margin-top: 12px;
-    }
-    .quiz-item {
-      margin-bottom: 10px;
-      padding-bottom: 8px;
-      border-bottom: 2px dashed #eac67a;
-    }
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 10px;
-      border-radius: 12px;
-      background: #e1e7f3;
-      border: 2px solid #18121e;
-      font-weight: 800;
-      cursor: pointer;
-    }
-    .pill.checked { background: #dbead3; border-color: #5f8f4b; }
-    .extras-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 12px;
-    }
-    .flashcard {
-      perspective: 1000px;
-      cursor: pointer;
-    }
-    .flash-inner {
-      position: relative;
-      width: 100%;
-      min-height: 140px;
-      transition: transform 0.6s;
-      transform-style: preserve-3d;
-    }
-    .flash-inner.flip { transform: rotateY(180deg); }
-    .flash-face {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 16px;
-      border: 3px solid #18121e;
-      display: grid;
-      place-items: center;
-      padding: 12px;
-      font-weight: 800;
-      text-align: center;
-      box-shadow: 0 8px 0 #bde0fe;
-    }
-    .flash-face.back { transform: rotateY(180deg); background: #f7f2d4; }
-    .score-box {
-      margin-top: 14px;
-      background: rgba(255,255,255,0.9);
-      border: 2px solid #18121e;
-      border-radius: 16px;
-      padding: 10px 12px;
-      box-shadow: var(--shadow);
-    }
-    .score-bar {
-      height: 12px;
-      border-radius: 10px;
-      background: #f0f4ff;
-      overflow: hidden;
-      border: 2px solid #18121e;
-    }
-    .score-bar span {
-      display: block;
-      height: 100%;
-      width: 0;
-      background: linear-gradient(90deg, var(--primary), var(--secondary));
-      transition: width 0.35s ease;
-    }
-    @media (max-width: 900px) {
-      nav { grid-auto-flow: row; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); }
-    }
-    @media (max-width: 700px) {
-      nav a { padding: 8px 10px; font-size: 14px; }
-      .hero { grid-template-columns: 1fr; }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <nav>
-      <a href="#home">Home</a>
-      <a href="#kosakata">Kosakata / Ide Utama</a>
-      <a href="#pelajaran">Pelajaran</a>
-      <a href="#aktivitas">Aktivitas</a>
-      <a href="#cerita">Cerita</a>
-      <a href="#kuis">Kuis</a>
-      <a href="#tambahan">Lembar Kerja</a>
-    </nav>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Termokimia: Eksoterm &amp; Endoterm</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Baloo+2:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- React & tools -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="topbar">
+        <div class="logo-block">
+          <img
+            src="logo-termokimia.png"
+            alt="Logo Termokimia Eksoterm Endoterm"
+          />
+          <span>Termokimia</span>
+        </div>
+        <button
+          class="menu-toggle"
+          id="menuToggle"
+          aria-label="buka menu navigasi"
+        >
+          ☰
+        </button>
+        <nav class="menu-links" id="menuLinks">
+          <a href="#home">Home</a>
+          <a href="#kosakata">Kosakata / Ide Utama</a>
+          <a href="#pelajaran">Pelajaran</a>
+          <a href="#aktivitas">Aktivitas</a>
+          <a href="#cerita">Cerita</a>
+          <a href="#kuis">Kuis</a>
+          <a href="#tambahan">Lembar Kerja</a>
+        </nav>
+      </div>
+    </header>
 
-  <section class="hero" id="home">
-    <div class="hero-text">
-      <div class="badge-age">&#127891; Siswa Kelas XI &#8226; Usia 16-17</div>
-      <h1>Termokimia: Eksoterm &amp; Endoterm</h1>
-      <p>Selamat datang! Ayo belajar tentang perubahan energi dalam reaksi kimia dengan cara yang seru, modern, dan mudah dipahami!</p>
-      <div class="cta-buttons">
-        <button class="btn primary" onclick="document.querySelector('#pelajaran').scrollIntoView({behavior:'smooth'})">Mulai Belajar</button>
-        <button class="btn secondary" onclick="document.querySelector('#aktivitas').scrollIntoView({behavior:'smooth'})">Coba Aktivitas</button>
-        <button class="btn ghost" id="modeToggle">Mode: Eksoterm</button>
-      </div>
-      <div class="score-box">
-        <div class="score-label">XP Energi: <span id="scoreValue">0</span>/<span id="scoreTotal">13</span></div>
-        <div class="score-bar"><span id="scoreFill"></span></div>
-      </div>
-    </div>
-    <div class="hero-visual">
-      <div class="thermo-card">
-        <div class="mini-card">
-          <strong>&#128293; Eksoterm</strong>
-          <small>Panas keluar, &Delta;H negatif, suhu sekitar naik.</small>
-          <div class="meter"><span style="width:70%"></span></div>
+    <section class="hero" id="home">
+      <div class="hero-text">
+        <div class="badge-age">&#127891; Siswa Kelas XI</div>
+        <h1>Termokimia: Eksoterm &amp; Endoterm</h1>
+        <p>
+          Selamat datang! Ayo belajar tentang perubahan energi dalam reaksi
+          kimia dengan cara yang seru, modern, dan mudah dipahami!
+        </p>
+        <div class="cta-buttons">
+          <button
+            class="btn secondary"
+            onclick="document.querySelector('#pelajaran').scrollIntoView({behavior:'smooth'})"
+          >
+            Mulai Belajar
+          </button>
+          <button
+            class="btn secondary"
+            onclick="document.querySelector('#aktivitas').scrollIntoView({behavior:'smooth'})"
+          >
+            Coba Aktivitas
+          </button>
+          <button class="btn ghost" id="modeToggle">Mode: Eksoterm</button>
         </div>
-        <div class="mini-card">
-          <strong>&#10052; Endoterm</strong>
-          <small>Panas masuk, &Delta;H positif, suhu sekitar turun.</small>
-          <div class="meter"><span style="width:30%; background: linear-gradient(90deg, #93c178, #465c8b);"></span></div>
-        </div>
-        <div class="mini-card">
-          <strong>&#9881;&#65039; &Delta;H Tracker</strong>
-          <input type="range" id="energyRange" min="-50" max="50" value="0">
-          <div id="energyLabel" style="font-weight:800;">Seimbang: butuh bukti!</div>
+        <div class="score-box">
+          <div class="score-label">
+            XP Energi: <span id="scoreValue">0</span>/<span id="scoreTotal"
+              >13</span
+            >
+          </div>
+          <div class="score-bar"><span id="scoreFill"></span></div>
         </div>
       </div>
-    </div>
-  </section>
+      <div class="hero-visual">
+        <div class="thermo-card">
+          <div class="mini-card">
+            <strong>&#128293; Eksoterm</strong>
+            <small>Panas keluar, &Delta;H negatif, suhu sekitar naik.</small>
+            <div class="meter"><span style="width: 70%"></span></div>
+          </div>
+          <div class="mini-card">
+            <strong>&#10052; Endoterm</strong>
+            <small>Panas masuk, &Delta;H positif, suhu sekitar turun.</small>
+            <div class="meter">
+              <span
+                style="
+                  width: 30%;
+                  background: linear-gradient(90deg, #93c178, #465c8b);
+                "
+              ></span>
+            </div>
+          </div>
+          <div class="mini-card">
+            <strong>&#9881;&#65039; &Delta;H Tracker</strong>
+            <input type="range" id="energyRange" min="-50" max="50" value="0" />
+            <div id="energyLabel" style="font-weight: 800">
+              Seimbang: butuh bukti!
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <section class="section" id="kosakata">
-    <div class="pill-label">&#128218; Kosakata / Ide Utama</div>
-    <h2>Kenalan Dulu Yuk!</h2>
-    <div class="cards-grid">
-      <div class="card flip-card">
-        <div class="flip-inner">
-          <div class="flip-face" style="background:#f7f2d4;">
-            <div class="big-icon">&#128293;</div>
-            <h3>Eksoterm</h3>
-            <p>Keluarkan energi ke lingkungan.</p>
+    <section class="section" id="kosakata">
+      <div class="pill-label">&#128218; Kosakata / Ide Utama</div>
+      <h2>Kenalan Dulu Yuk!</h2>
+      <div class="cards-grid">
+        <div class="card flip-card">
+          <div class="flip-inner">
+            <div class="flip-face" style="background: #f7f2d4">
+              <h3>Sistem dan Lingkungan</h3>
+            </div>
+            <div class="flip-face back">
+              <ul style="list-style-type: none; padding: 0; margin: 0">
+                <li align="left">
+                  Sistem: Bagian dari alam semesta yang sedang dipelajari
+                  (contoh: reaksi kimia dalam tabung reaksi).
+                </li>
+                <li align="left">
+                  Lingkungan: Segala sesuatu di luar sistem yang dapat
+                  berinteraksi dengan sistem (contoh: udara,wadah, dll.)
+                </li>
+              </ul>
+            </div>
           </div>
-          <div class="flip-face back">Panas keluar, &Delta;H negatif, sekitar jadi hangat.</div>
+        </div>
+        <div class="card flip-card">
+          <div class="flip-inner">
+            <div class="flip-face" style="background: #e1e7f3">
+              <h3>Eksoterm & Endoterm</h3>
+            </div>
+            <div class="flip-face back" style="text-align: left">
+              Reaksi eksoterm adalah reaksi kimia yang melepaskan energi panas
+              ke lingkungan sekitarnya, sehingga suhu lingkungan menjadi lebih
+              panas. Sebaliknya, reaksi endoterm adalah reaksi kimia yang
+              menyerap energi panas dari lingkungan, sehingga suhu lingkungan
+              menjadi lebih dingin.
+            </div>
+          </div>
+        </div>
+        <div class="card flip-card">
+          <div class="flip-inner">
+            <div class="flip-face" style="background: #e3f2e7">
+              <h3>Perubahan Entalpi (&Delta;H)</h3>
+            </div>
+            <div class="flip-face back" style="text-align: left">
+              Perubahan entalpi (ΔH) adalah perubahan energi panas dalam suatu
+              sistem kimia yang diukur pada tekanan konstan. Besaran ini
+              menunjukkan berapa banyak energi yang diserap atau dilepaskan
+              selama reaksi berlangsung. ΔH bernilai negatif = reaksi melepaskan
+              panas (eksoterm) ΔH bernilai positif = reaksi menyerap
+              panas (endoterm).
+            </div>
+          </div>
         </div>
       </div>
-      <div class="card flip-card">
-        <div class="flip-inner">
-          <div class="flip-face" style="background:#e1e7f3;">
-            <div class="big-icon">&#10052;</div>
-            <h3>Endoterm</h3>
-            <p>Mengambil energi dari lingkungan.</p>
-          </div>
-          <div class="flip-face back">Panas masuk, &Delta;H positif, sekitar terasa dingin.</div>
-        </div>
-      </div>
-      <div class="card flip-card">
-        <div class="flip-inner">
-          <div class="flip-face" style="background:#e3f2e7;">
-            <div class="big-icon">&#9881;&#65039;</div>
-            <h3>Entalpi (&Delta;H)</h3>
-            <p>Tabungan energi dalam zat.</p>
-          </div>
-          <div class="flip-face back">&Delta;H negatif: lepas panas. &Delta;H positif: serap panas.</div>
-        </div>
-      </div>
-      <div class="card flip-card">
-        <div class="flip-inner">
-          <div class="flip-face" style="background:#dfdce3;">
-            <div class="big-icon">&#128200;</div>
-            <h3>Diagram Energi</h3>
-            <p>Gambar naik-turun energi reaktan ke produk.</p>
-          </div>
-          <div class="flip-face back">Eksoterm: turun. Endoterm: naik. Lihat posisi awal vs akhir.</div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section" id="pelajaran">
-    <div class="pill-label">&#129504; Pelajaran Mini</div>
-    <h2>Eksoterm vs Endoterm</h2>
-    <div class="mini-lesson">
-      <div class="card">
-        <h3>Apa &amp; Mengapa</h3>
-        <ul class="info-list">
-          <li><span class="bubble-icon">1</span> Termokimia mempelajari perubahan energi saat reaksi.</li>
-          <li><span class="bubble-icon">2</span> Eksoterm: energi keluar, suhu sekitar naik.</li>
-          <li><span class="bubble-icon">3</span> Endoterm: energi masuk, suhu sekitar turun.</li>
-          <li><span class="bubble-icon">4</span> &Delta;H membantu memprediksi kebutuhan atau pelepasan panas.</li>
-        </ul>
-      </div>
-      <div class="diagram">
-        <h3>Diagram Kartun</h3>
-        <p>Eksoterm: Reaktan (energi tinggi) &#8594; Produk (lebih rendah) + panas.</p>
-        <p>Endoterm: Reaktan + panas &#8594; Produk (energi lebih tinggi).</p>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">
-          <div style="background:#f7f2d4;border:2px solid #eac67a;border-radius:12px;padding:8px;">
-            &#128293; Eksoterm<br>&Delta;H negatif<br>Panas dilepaskan
+    <section class="section" id="pelajaran">
+      <div class="pill-label">&#129504; Materi Pembelajaran </div>
+      <h2>Eksoterm vs Endoterm</h2>
+      <div class="mini-lesson">
+        <div class="card">
+          <h3>Apa &amp; Mengapa</h3>
+          <ul class="info-list">
+            <li>
+              <span class="bubble-icon">1</span> Termokimia mempelajari
+              perubahan energi saat reaksi.
+            </li>
+            <li>
+              <span class="bubble-icon">2</span> Eksoterm: energi keluar, suhu
+              sekitar naik.
+            </li>
+            <li>
+              <span class="bubble-icon">3</span> Endoterm: energi masuk, suhu
+              sekitar turun.
+            </li>
+            <li>
+              <span class="bubble-icon">4</span> &Delta;H membantu memprediksi
+              kebutuhan atau pelepasan panas.
+            </li>
+          </ul>
+        </div>
+        <div class="diagram">
+          <h3>Diagram</h3>
+          <p>
+            Eksoterm: Reaktan (energi tinggi) &#8594; Produk (lebih rendah) +
+            panas.
+          </p>
+          <p>Endoterm: Reaktan + panas &#8594; Produk (energi lebih tinggi).</p>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 10px;
+              margin-top: 10px;
+            "
+          >
+            <div
+              style="
+                background: #f7f2d4;
+                border: 2px solid #eac67a;
+                border-radius: 12px;
+                padding: 8px;
+              "
+            >
+              &#128293; Eksoterm<br />&Delta;H negatif<br />Panas dilepaskan
+            </div>
+            <div
+              style="
+                background: #e1e7f3;
+                border: 2px solid #465c8b;
+                border-radius: 12px;
+                padding: 8px;
+              "
+            >
+              &#10052; Endoterm<br />&Delta;H positif<br />Panas diserap
+            </div>
           </div>
-          <div style="background:#e1e7f3;border:2px solid #465c8b;border-radius:12px;padding:8px;">
-            &#10052; Endoterm<br>&Delta;H positif<br>Panas diserap
+        </div>
+        <div class="card">
+          <h3>Contoh</h3>
+          <ul class="info-list">
+            <li>&#128293; Membakar kayu &#8594; hangat + cahaya</li>
+            <li>&#9889; Reaksi termit &#8594; panas melelehkan besi</li>
+            <li>&#10052; Mencairkan es &#8594; butuh panas dari tangan</li>
+            <li>&#127848; Es krim di freezer &#8594; menyerap panas keluar</li>
+          </ul>
+          <div class="chant">
+            Chant: "Eksoterm keluarkan panas, Endoterm minum panas!" &#8212;
+            tepuk tangan sambil baca!
           </div>
         </div>
       </div>
-      <div class="card">
-        <h3>Contoh Cepat</h3>
-        <ul class="info-list">
-          <li>&#128293; Membakar kayu &#8594; hangat + cahaya</li>
-          <li>&#9889; Reaksi termit &#8594; panas melelehkan besi</li>
-          <li>&#10052; Mencairkan es &#8594; butuh panas dari tangan</li>
-          <li>&#127848; Es krim di freezer &#8594; menyerap panas keluar</li>
-        </ul>
-        <div class="chant">Chant: "Eksoterm keluarkan panas, Endoterm minum panas!" &#8212; tepuk tangan sambil baca!</div>
+      <div class="energy-play">
+        <label for="energyRange2" style="font-weight: 800"
+          >Gerakkan slider energi:</label
+        >
+        <input type="range" id="energyRange2" min="-50" max="50" value="-10" />
+        <div id="energyLabel2" style="font-weight: 800">
+          Sedikit eksoterm: panas keluar.
+        </div>
       </div>
-    </div>
-    <div class="energy-play">
-      <label for="energyRange2" style="font-weight:800;">Gerakkan slider energi:</label>
-      <input type="range" id="energyRange2" min="-50" max="50" value="-10">
-      <div id="energyLabel2" style="font-weight:800;">Sedikit eksoterm: panas keluar.</div>
-    </div>
-    <table aria-label="perbandingan reaksi eksoterm dan endoterm">
-      <tr>
-        <th>Eksoterm</th>
-        <th>Endoterm</th>
-      </tr>
-      <tr>
-        <td>&Delta;H &lt; 0 (energi keluar)</td>
-        <td>&Delta;H &gt; 0 (energi masuk)</td>
-      </tr>
-      <tr>
-        <td>Suhu lingkungan naik</td>
-        <td>Suhu lingkungan turun</td>
-      </tr>
-      <tr>
-        <td>Contoh: pembakaran, netralisasi</td>
-        <td>Contoh: fotosintesis, mencairkan es</td>
-      </tr>
-    </table>
-  </section>
-  <section class="section" id="aktivitas">
-    <div class="pill-label">&#127918; Aktivitas Interaktif</div>
-    <h2>Ayo Bermain &amp; Belajar</h2>
-    <div class="activities">
-      <div class="activity">
-        <h3>Drag &amp; Drop</h3>
+      <table aria-label="perbandingan reaksi eksoterm dan endoterm">
+        <tr>
+          <th>Eksoterm</th>
+          <th>Endoterm</th>
+        </tr>
+        <tr>
+          <td>&Delta;H &lt; 0 (energi keluar)</td>
+          <td>&Delta;H &gt; 0 (energi masuk)</td>
+        </tr>
+        <tr>
+          <td>Suhu lingkungan naik</td>
+          <td>Suhu lingkungan turun</td>
+        </tr>
+        <tr>
+          <td>Contoh: pembakaran, netralisasi</td>
+          <td>Contoh: fotosintesis, mencairkan es</td>
+        </tr>
+      </table>
+    </section>
+    <section class="section" id="aktivitas">
+      <div class="pill-label">&#127918; Aktivitas Interaktif</div>
+      <h2>Ayo Bermain &amp; Belajar</h2>
+      <div class="activities">
+        <div class="activity">
+          <h3>Drag &amp; Drop</h3>
         <p>Tarik istilah ke deskripsi yang tepat.</p>
         <div class="drag-items">
-          <div class="chip" draggable="true" data-target="lepas">Eksoterm</div>
-          <div class="chip" draggable="true" data-target="serap">Endoterm</div>
-          <div class="chip" draggable="true" data-target="delta">Kalor Reaksi (&Delta;H)</div>
-          <div class="chip" draggable="true" data-target="grafik">Diagram Energi</div>
-        </div>
-        <div class="drop-zones" style="margin-top:8px;">
+          <div class="chip" draggable="true" data-target="lepas">
+            Eksoterm
+          </div>
+            <div class="chip" draggable="true" data-target="serap">
+              Endoterm
+            </div>
+            <div class="chip" draggable="true" data-target="delta">
+              Kalor Reaksi (&Delta;H)
+            </div>
+            <div class="chip" draggable="true" data-target="grafik">
+              Diagram Energi
+            </div>
+          </div>
+        <div class="drop-zones" style="margin-top: 8px">
           <div class="drop-zone" data-accept="lepas">Panas keluar</div>
           <div class="drop-zone" data-accept="serap">Panas masuk</div>
           <div class="drop-zone" data-accept="delta">Nilai + atau -</div>
           <div class="drop-zone" data-accept="grafik">Naik turun energi</div>
         </div>
+        <button class="btn secondary" style="margin-top: 10px" onclick="resetDrag()">
+          Reset Jawaban
+        </button>
       </div>
-      <div class="activity">
-        <h3>Pilih Jawaban</h3>
-        <p>Pembakaran kayu termasuk...</p>
-        <div class="choice-buttons" data-question="q1">
-          <button data-correct="true">Eksoterm (panas keluar)</button>
-          <button>Endoterm (panas masuk)</button>
-          <button>Netral</button>
+        <div class="activity">
+          <h3>Pilih Jawaban</h3>
+          <p>Pembakaran kayu termasuk...</p>
+          <div class="choice-buttons" data-question="q1">
+            <button data-correct="true">Eksoterm (panas keluar)</button>
+            <button>Endoterm (panas masuk)</button>
+            <button>Netral</button>
+          </div>
+          <p style="margin-top: 8px">Mencairkan es termasuk...</p>
+          <div class="choice-buttons" data-question="q2">
+            <button>Eksoterm</button>
+            <button data-correct="true">Endoterm</button>
+            <button>Reaksi netral</button>
+          </div>
         </div>
-        <p style="margin-top:8px;">Mencairkan es termasuk...</p>
-        <div class="choice-buttons" data-question="q2">
-          <button>Eksoterm</button>
-          <button data-correct="true">Endoterm</button>
-          <button>Reaksi netral</button>
+        <div class="activity">
+          <h3>Isi Titik-Titik</h3>
+          <p>Masukkan kata: &Delta;H eksoterm bernilai _____</p>
+          <input
+            id="blankInput"
+            style="
+              width: 100%;
+              padding: 10px;
+              border-radius: 12px;
+              border: 2px solid #18121e;
+              font-weight: 700;
+            "
+            placeholder="tulis positif / negatif"
+          />
+          <button
+            class="btn primary"
+            style="margin-top: 8px"
+            onclick="checkBlank()"
+          >
+            Cek Jawaban
+          </button>
+          <div id="blankResult" style="margin-top: 8px; font-weight: 700"></div>
         </div>
-      </div>
-      <div class="activity">
-        <h3>Isi Titik-Titik</h3>
-        <p>Masukkan kata: &Delta;H eksoterm bernilai _____</p>
-        <input id="blankInput" style="width:100%;padding:10px;border-radius:12px;border:2px solid #18121e;font-weight:700;" placeholder="tulis positif / negatif">
-        <button class="btn primary" style="margin-top:8px;" onclick="checkBlank()">Cek Jawaban</button>
-        <div id="blankResult" style="margin-top:8px;font-weight:700;"></div>
-      </div>
-      <div class="activity">
-        <h3>Kategorisasi Cepat</h3>
-        <p>Pilih kelompoknya.</p>
-        <div class="choice-buttons" data-question="cat1">
-          <button data-side="exo">Es batu terbentuk</button>
-          <button data-side="endo">Es meleleh di tangan</button>
+        <div class="activity">
+          <h3>Kategorisasi Cepat</h3>
+          <p>Pilih kelompoknya.</p>
+          <div class="choice-buttons" data-question="cat1">
+            <button data-side="exo">Es batu terbentuk</button>
+            <button data-side="endo">Es meleleh di tangan</button>
           <button data-side="exo">Besi berkarat hangat</button>
           <button data-side="endo">Fotosintesis daun</button>
         </div>
-        <div style="display:flex;gap:10px;margin-top:8px;">
-          <div class="drop-zone" style="flex:1;" aria-label="kelompok eksoterm">Kelompokkan ke Eksoterm</div>
-          <div class="drop-zone" style="flex:1;background:#e1e7f3;" aria-label="kelompok endoterm">Kelompokkan ke Endoterm</div>
+        <div style="display: flex; gap: 10px; margin-top: 8px">
+          <div
+              class="drop-zone"
+              style="flex: 1"
+              aria-label="kelompok eksoterm"
+            >
+              Kelompokkan ke Eksoterm
+            </div>
+            <div
+              class="drop-zone"
+              style="flex: 1; background: #e1e7f3"
+              aria-label="kelompok endoterm"
+            >
+              Kelompokkan ke Endoterm
+            </div>
+          </div>
+          <button class="btn secondary" style="margin-top: 10px" onclick="resetKategori()">
+            Reset Kategori
+          </button>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section" id="cerita">
-    <div class="pill-label">&#128214; Cerita Bergambar</div>
-    <h2>Petualangan Kimo &amp; Luna</h2>
-    <div class="story-box">
-      <p>Kimo, robot ceria, dan Luna, si kelinci ilmiah, bermain di lab energi. Mereka memanaskan serbuk logam dan termometer naik tinggi. "Ini eksoterm!" seru Kimo saat cahaya muncul. Luna menaruh es ke gelas, tangannya dingin. "Ini endoterm, es minum panas dari sekitarnya," katanya. Mereka menggambar grafik energi warna-warni dan membuat poster: "Eksoterm = keluar panas, Endoterm = masuk panas".</p>
-      <div class="questions">
-        <button onclick="alert('Eksperimen logam menyala: eksoterm karena melepas panas.')">Pertanyaan 1: Bagian mana yang eksoterm?</button>
-        <button onclick="alert('Saat es mengambil panas dari tangan: endoterm.')">Pertanyaan 2: Bagian mana yang endoterm?</button>
-        <button onclick="alert('Poster: Eksoterm keluar panas, Endoterm masuk panas.')">Pertanyaan 3: Pesan poster apa?</button>
+    <section class="section" id="cerita">
+      <div class="pill-label">&#128214; Cerita Bergambar</div>
+      <h2>Petualangan Kimo &amp; Luna</h2>
+      <div class="story-box">
+        <p>
+          Kimo, robot ceria, dan Luna, si kelinci ilmiah, bermain di lab energi.
+          Mereka memanaskan serbuk logam dan termometer naik tinggi. "Ini
+          eksoterm!" seru Kimo saat cahaya muncul. Luna menaruh es ke gelas,
+          tangannya dingin. "Ini endoterm, es minum panas dari sekitarnya,"
+          katanya. Mereka menggambar grafik energi warna-warni dan membuat
+          poster: "Eksoterm = keluar panas, Endoterm = masuk panas".
+        </p>
+        <div class="questions">
+          <button
+            onclick="showModal('Cerita', 'Eksperimen logam menyala: eksoterm karena melepas panas.')"
+          >
+            Pertanyaan 1: Bagian mana yang eksoterm?
+          </button>
+          <button
+            onclick="showModal('Cerita', 'Saat es mengambil panas dari tangan: endoterm.')"
+          >
+            Pertanyaan 2: Bagian mana yang endoterm?
+          </button>
+          <button
+            onclick="showModal('Cerita', 'Poster: Eksoterm keluar panas, Endoterm masuk panas.')"
+          >
+            Pertanyaan 3: Pesan poster apa?
+          </button>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section" id="kuis">
-    <div class="pill-label">&#9989; Kuis / Pemahaman</div>
-    <h2>Siap Uji Diri?</h2>
-    <div class="quiz">
-      <div class="quiz-item">
-        &#128293; True / False: Pembakaran adalah eksoterm.
-        <div class="choice-buttons" data-question="t1">
-          <button data-correct="true">True &#10004;</button>
-          <button>False &#10006;</button>
+    <section class="section" id="kuis">
+      <div class="pill-label">&#9989; Kuis / Pemahaman</div>
+      <h2>Siap Uji Diri?</h2>
+      <div class="quiz">
+        <div class="quiz-item">
+          &#128293; True / False: Pembakaran adalah eksoterm.
+          <div class="choice-buttons" data-question="t1">
+            <button data-correct="true">True &#10004;</button>
+            <button>False &#10006;</button>
+          </div>
+        </div>
+        <div class="quiz-item">
+          &#10052; True / False: Mencairkan es adalah endoterm.
+          <div class="choice-buttons" data-question="t2">
+            <button data-correct="true">True &#10004;</button>
+            <button>False &#10006;</button>
+          </div>
+        </div>
+        <div class="quiz-item">
+          &#9881;&#65039; Pencocokan: &Delta;H positif &#8594; ...
+          <div class="choice-buttons" data-question="t3">
+            <button>Eksoterm</button>
+            <button data-correct="true">Endoterm</button>
+            <button>Netral</button>
+          </div>
+        </div>
+        <div class="quiz-item">
+          &#129300; Prediksi: Apa yang terjadi jika reaksi menyerap panas dari
+          lingkungan?
+          <div class="choice-buttons" data-question="t4">
+            <button data-correct="true">Suhu sekitar turun</button>
+            <button>Suhu sekitar naik</button>
+            <button>Tidak berubah</button>
+          </div>
+        </div>
+        <div class="quiz-item">
+          &#128200; Diagram: Energi produk lebih tinggi dari reaktan berarti...
+          <div class="choice-buttons" data-question="t5">
+            <button data-correct="true">Endoterm</button>
+            <button>Eksoterm</button>
+          </div>
+        </div>
+        <div class="quiz-item">
+          &#10024; Pencocokan simbol:
+          <div
+            style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px"
+          >
+            <div class="pill" data-toggle>&Delta;H &lt; 0</div>
+            <div class="pill" data-toggle>&Delta;H &gt; 0</div>
+            <div class="pill" data-toggle>Energi keluar</div>
+            <div class="pill" data-toggle>Energi masuk</div>
+          </div>
+          <small>Centang mana saja yang menurutmu cocok dengan eksoterm.</small>
         </div>
       </div>
-      <div class="quiz-item">
-        &#10052; True / False: Mencairkan es adalah endoterm.
-        <div class="choice-buttons" data-question="t2">
-          <button data-correct="true">True &#10004;</button>
-          <button>False &#10006;</button>
-        </div>
-      </div>
-      <div class="quiz-item">
-        &#9881;&#65039; Pencocokan: &Delta;H positif &#8594; ...
-        <div class="choice-buttons" data-question="t3">
-          <button>Eksoterm</button>
-          <button data-correct="true">Endoterm</button>
-          <button>Netral</button>
-        </div>
-      </div>
-      <div class="quiz-item">
-        &#129300; Prediksi: Apa yang terjadi jika reaksi menyerap panas dari lingkungan?
-        <div class="choice-buttons" data-question="t4">
-          <button data-correct="true">Suhu sekitar turun</button>
-          <button>Suhu sekitar naik</button>
-          <button>Tidak berubah</button>
-        </div>
-      </div>
-      <div class="quiz-item">
-        &#128200; Diagram: Energi produk lebih tinggi dari reaktan berarti...
-        <div class="choice-buttons" data-question="t5">
-          <button data-correct="true">Endoterm</button>
-          <button>Eksoterm</button>
-        </div>
-      </div>
-      <div class="quiz-item">
-        &#10024; Pencocokan simbol:
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;">
-          <div class="pill" data-toggle>&Delta;H &lt; 0</div>
-          <div class="pill" data-toggle>&Delta;H &gt; 0</div>
-          <div class="pill" data-toggle>Energi keluar</div>
-          <div class="pill" data-toggle>Energi masuk</div>
-        </div>
-        <small>Centang mana saja yang menurutmu cocok dengan eksoterm.</small>
-      </div>
-    </div>
-  </section>
+    </section>
   <section class="section" id="tambahan">
     <div class="pill-label">&#129504; Materi Tambahan</div>
     <h2>Bonus Belajar</h2>
-    <div class="extras-grid">
-      <div class="flashcard" aria-label="flashcard eksoterm">
-        <div class="flash-inner">
-          <div class="flash-face" style="background:#ffe7d9;">Eksoterm</div>
-          <div class="flash-face back">&Delta;H negatif, panas keluar, contoh: pembakaran lilin</div>
+      <div class="extras-grid">
+        <div class="flashcard" aria-label="flashcard eksoterm">
+          <div class="flash-inner">
+            <div class="flash-face" style="background: #ffe7d9">Eksoterm</div>
+            <div class="flash-face back">
+              &Delta;H negatif, panas keluar, contoh: pembakaran lilin
+            </div>
+          </div>
+        </div>
+        <div class="flashcard" aria-label="flashcard endoterm">
+          <div class="flash-inner">
+            <div class="flash-face" style="background: #e1f3ff">Endoterm</div>
+            <div class="flash-face back">
+              &Delta;H positif, panas masuk, contoh: mencairkan es
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Word Wall</h3>
+          <p>
+            Eksoterm &#8226; Endoterm &#8226; &Delta;H &#8226; Diagram Energi
+            &#8226; Reaktan &#8226; Produk &#8226; Panas &#8226; Entalpi &#8226;
+            Sistem &#8226; Lingkungan
+          </p>
+        </div>
+        <div class="card">
+          <h3>Poster Mini</h3>
+          <p>Judul: "Energi Bergerak!"</p>
+          <ul class="info-list">
+            <li>
+              <span class="bubble-icon">&#128293;</span> Eksoterm: keluar panas
+            </li>
+            <li>
+              <span class="bubble-icon">&#10052;</span> Endoterm: masuk panas
+            </li>
+            <li>
+              <span class="bubble-icon">&#128200;</span> &Delta;H negatif /
+              positif
+            </li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Langkah Eksperimen Mini</h3>
+          <ol>
+            <li>Siapkan termometer, gelas air, garam, dan lilin.</li>
+            <li>Ukur suhu awal air.</li>
+            <li>Tambahkan garam (endoterm) dan catat penurunan suhu.</li>
+            <li>Panaskan air di atas lilin (eksoterm), catat kenaikan suhu.</li>
+            <li>Gambar diagram energi kedua percobaan.</li>
+          </ol>
+        </div>
+        <div class="card">
+          <h3>Lembar Kerja Cepat</h3>
+          <p>
+            1) Tandai contoh eksoterm dan endoterm di rumah.<br />2) Gambar
+            diagram energi sederhana.<br />3) Tulis chant favoritmu.
+          </p>
         </div>
       </div>
-      <div class="flashcard" aria-label="flashcard endoterm">
-        <div class="flash-inner">
-          <div class="flash-face" style="background:#e1f3ff;">Endoterm</div>
-          <div class="flash-face back">&Delta;H positif, panas masuk, contoh: mencairkan es</div>
-        </div>
-      </div>
-      <div class="card">
-        <h3>Word Wall</h3>
-        <p>Eksoterm &#8226; Endoterm &#8226; &Delta;H &#8226; Diagram Energi &#8226; Reaktan &#8226; Produk &#8226; Panas &#8226; Entalpi &#8226; Sistem &#8226; Lingkungan</p>
-      </div>
-      <div class="card">
-        <h3>Poster Mini</h3>
-        <p>Judul: "Energi Bergerak!"</p>
-        <ul class="info-list">
-          <li><span class="bubble-icon">&#128293;</span> Eksoterm: keluar panas</li>
-          <li><span class="bubble-icon">&#10052;</span> Endoterm: masuk panas</li>
-          <li><span class="bubble-icon">&#128200;</span> &Delta;H negatif / positif</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>Langkah Eksperimen Mini</h3>
-        <ol>
-          <li>Siapkan termometer, gelas air, garam, dan lilin.</li>
-          <li>Ukur suhu awal air.</li>
-          <li>Tambahkan garam (endoterm) dan catat penurunan suhu.</li>
-          <li>Panaskan air di atas lilin (eksoterm), catat kenaikan suhu.</li>
-          <li>Gambar diagram energi kedua percobaan.</li>
-        </ol>
-      </div>
-      <div class="card">
-        <h3>Lembar Kerja Cepat</h3>
-        <p>1) Tandai contoh eksoterm dan endoterm di rumah.<br>2) Gambar diagram energi sederhana.<br>3) Tulis chant favoritmu.</p>
-      </div>
-    </div>
   </section>
 
-  <script>
-    // Progress tracker
-    const progressGoals = new Set(['drop1','drop2','drop3','drop4','q1','q2','blank','cat1','t1','t2','t3','t4','t5']);
-    const progressState = {};
-    const scoreValue = document.getElementById('scoreValue');
-    const scoreTotal = document.getElementById('scoreTotal');
-    const scoreFill = document.getElementById('scoreFill');
-    scoreTotal.textContent = progressGoals.size;
-    function markDone(key) {
-      if (!progressGoals.has(key) || progressState[key]) return;
-      progressState[key] = true;
-      const done = Object.keys(progressState).length;
-      const percent = Math.round((done / progressGoals.size) * 100);
-      scoreValue.textContent = done;
-      scoreFill.style.width = percent + '%';
-    }
+  <section class="section" id="quiz-app">
+    <div class="pill-label">🧪 Kuis Interaktif Termokimia</div>
+    <h2>Latihan Kelas XI (Eksoterm &amp; Endoterm)</h2>
+    <div id="react-quiz-root"></div>
+  </section>
 
-    // Mode toggle
-    const modeToggle = document.getElementById('modeToggle');
-    modeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('endo-mode');
-      modeToggle.textContent = document.body.classList.contains('endo-mode') ? 'Mode: Endoterm' : 'Mode: Eksoterm';
-    });
+  <section class="section" id="quiz-glb">
+    <div class="pill-label">🧪 Kuis Interaktif</div>
+    <h2>Kuis Gerak Lurus (SMP Kelas 8)</h2>
+    <div id="quiz-root"></div>
+  </section>
 
-    // Hero meter slider
-    const energyRange = document.getElementById('energyRange');
-    const energyLabel = document.getElementById('energyLabel');
-    energyRange.addEventListener('input', () => {
-      const val = Number(energyRange.value);
-      if (val > 10) {
-        energyLabel.textContent = 'Endoterm: butuh panas dari sekitar';
-      } else if (val < -10) {
-        energyLabel.textContent = 'Eksoterm: melepas panas ke sekitar';
-      } else {
-        energyLabel.textContent = 'Seimbang: butuh bukti!';
-      }
-    });
+  <!-- Modal pop-up -->
+  <div
+    id="appModal"
+    class="fixed inset-0 hidden items-center justify-center z-50"
+  >
+    <div class="modal-overlay absolute inset-0"></div>
+    <div
+      class="relative bg-white rounded-2xl shadow-2xl p-6 w-11/12 max-w-md border-2 border-[#233237]"
+    >
+      <div class="flex items-start gap-3">
+        <div
+          class="w-10 h-10 rounded-full bg-[#f7ef6a] border-2 border-[#233237] flex items-center justify-center text-xl"
+        >
+          ⚡
+        </div>
+        <div>
+          <h3 id="modalTitle" class="text-lg font-extrabold text-[#233237]">
+            Info
+          </h3>
+          <p
+            id="modalMessage"
+            class="text-sm font-semibold text-[#233237] mt-1"
+          >
+            Pesan
+          </p>
+        </div>
+      </div>
+      <div id="modalActions" class="flex justify-end mt-4 gap-2"></div>
+    </div>
+  </div>
 
-    // Energy slider in lesson
-    const energyRange2 = document.getElementById('energyRange2');
-    const energyLabel2 = document.getElementById('energyLabel2');
-    energyRange2.addEventListener('input', () => {
-      const val = Number(energyRange2.value);
-      if (val > 20) {
-        energyLabel2.textContent = 'Endoterm kuat: produk butuh energi tinggi.';
-      } else if (val < -20) {
-        energyLabel2.textContent = 'Eksoterm kuat: produk lebih rendah energinya.';
-      } else if (val >= -20 && val <= 20) {
-        energyLabel2.textContent = 'Sedang: lihat grafik untuk petunjuk energi.';
-      }
-    });
-
-    // Flip cards
-    document.querySelectorAll('.flip-card').forEach(card => {
-      const inner = card.querySelector('.flip-inner');
-      card.addEventListener('click', () => inner.classList.toggle('flip'));
-    });
-
-    // Drag and drop matching
-    const chips = document.querySelectorAll('.chip');
-    const zones = document.querySelectorAll('.drop-zone');
-    chips.forEach(chip => {
-      chip.addEventListener('dragstart', e => {
-        e.dataTransfer.setData('text/plain', chip.dataset.target);
-      });
-    });
-    zones.forEach((zone, idx) => {
-      zone.addEventListener('dragover', e => e.preventDefault());
-      zone.addEventListener('drop', e => {
-        e.preventDefault();
-        const data = e.dataTransfer.getData('text/plain');
-        if (zone.dataset.accept === data) {
-          zone.classList.add('correct');
-          zone.textContent = 'Cocok!';
-          markDone('drop' + (idx + 1));
-        } else {
-          zone.classList.remove('correct');
-          zone.textContent = 'Coba lagi';
-        }
-      });
-    });
-
-    const exoZone = document.querySelector('[aria-label=\"kelompok eksoterm\"]');
-    const endoZone = document.querySelector('[aria-label=\"kelompok endoterm\"]');
-
-    // Multiple choice highlighting
-    document.querySelectorAll('.choice-buttons').forEach(group => {
-      const qId = group.dataset.question;
-      group.querySelectorAll('button').forEach(btn => {
-        btn.addEventListener('click', () => {
-          group.querySelectorAll('button').forEach(b => b.classList.remove('correct', 'wrong'));
-          if (qId === 'cat1') {
-            btn.classList.add('correct');
-            if (btn.dataset.side === 'exo' && exoZone) exoZone.textContent = btn.textContent;
-            if (btn.dataset.side === 'endo' && endoZone) endoZone.textContent = btn.textContent;
-            markDone('cat1');
-            return;
-          }
-          if (btn.dataset.correct) {
-            btn.classList.add('correct');
-            if (qId) markDone(qId);
-          } else {
-            btn.classList.add('wrong');
-          }
-        });
-      });
-    });
-
-    // Fill in the blank checker
-    function checkBlank() {
-      const val = document.getElementById('blankInput').value.trim().toLowerCase();
-      const res = document.getElementById('blankResult');
-      if (val.includes('negatif')) {
-        res.textContent = 'Benar! Delta H eksoterm bernilai negatif.';
-        res.style.color = '#0c8c55';
-        markDone('blank');
-      } else if (val === '') {
-        res.textContent = 'Tulis dulu ya!';
-        res.style.color = '#18121e';
-      } else {
-        res.textContent = 'Belum tepat. Delta H eksoterm negatif.';
-        res.style.color = '#c0392b';
-      }
-    }
-
-    // Toggle pills for matching symbols
-    document.querySelectorAll('.pill[data-toggle]').forEach(pill => {
-      pill.addEventListener('click', () => {
-        pill.classList.toggle('checked');
-      });
-    });
-
-    // Flashcard flip
-    document.querySelectorAll('.flashcard').forEach(card => {
-      const inner = card.querySelector('.flash-inner');
-      card.addEventListener('click', () => inner.classList.toggle('flip'));
-    });
-  </script>
-</body>
+    <script src="js/main.js"></script>
+  </body>
 </html>
