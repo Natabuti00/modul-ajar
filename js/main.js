@@ -354,3 +354,280 @@
           );
         });
       }
+
+      // Bonus tabs & mini games
+      const bonusTabButtons = document.querySelectorAll("#tambahan .tab-btn");
+      const bonusTabContents = document.querySelectorAll("#tambahan .tab-content");
+
+      const organizerInfoMap = {
+        reaksi:
+          "Reaksi Kimia: Proses perubahan zat dari reaktan menjadi produk dengan perubahan energi.",
+        eksoterm: "EKSOTERM: Reaksi yang melepaskan energi panas ke lingkungan.",
+        endoterm: "ENDOTERM: Reaksi yang menyerap energi panas dari lingkungan.",
+        "ekso-delta": "ΔH < 0 (negatif): Produk memiliki energi lebih rendah dari reaktan.",
+        "ekso-suhu":
+          "Suhu Lingkungan NAIK: Panas yang dilepaskan membuat sekitar lebih panas.",
+        "ekso-energi": "Diagram Energi: Produk berada di bawah reaktan.",
+        "endo-delta": "ΔH > 0 (positif): Produk memiliki energi lebih tinggi dari reaktan.",
+        "endo-suhu":
+          "Suhu Lingkungan TURUN: Panas dari sekitar diserap oleh reaksi.",
+        "endo-energi": "Diagram Energi: Produk berada di atas reaktan.",
+      };
+
+      const organizerInfoEl = document.getElementById("organizer-info");
+      document.querySelectorAll(".organizer-node").forEach((node) => {
+        node.addEventListener("click", () => {
+          document
+            .querySelectorAll(".organizer-node")
+            .forEach((n) => n.classList.remove("active"));
+          node.classList.add("active");
+          const concept = node.dataset.concept;
+          if (organizerInfoEl) {
+            organizerInfoEl.textContent =
+              organizerInfoMap[concept] || "Klik node lain untuk info";
+          }
+        });
+      });
+
+      // Memory game
+      const memoryPairs = [
+        { icon: "🔥", label: "Eksoterm" },
+        { icon: "❄️", label: "Endoterm" },
+        { icon: "📊", label: "ΔH" },
+        { icon: "⚛️", label: "Reaksi" },
+        { icon: "🌡️", label: "Panas" },
+        { icon: "⬆️", label: "Naik" },
+        { icon: "⬇️", label: "Turun" },
+        { icon: "🧪", label: "Katalis" },
+        { icon: "📈", label: "Grafik" },
+        { icon: "🌍", label: "Sistem" },
+        { icon: "🔀", label: "Reaktan" },
+      ];
+      let memoryCards = [];
+      let memoryFlipped = [];
+      let memoryMatches = 0;
+      let memoryAttempts = 0;
+      let memoryInitialized = false;
+      const memoryBoard = document.getElementById("memory-board");
+      const memoryMatchesEl = document.getElementById("memory-matches");
+      const memoryAttemptsEl = document.getElementById("memory-attempts");
+      const memoryTotalEl = document.getElementById("memory-total");
+      const memoryResetBtn = document.getElementById("memory-reset-btn");
+
+      function buildMemoryBoard() {
+        if (!memoryBoard) return;
+        memoryInitialized = true;
+        memoryCards = [...memoryPairs, ...memoryPairs].sort(
+          () => Math.random() - 0.5
+        );
+        memoryFlipped = [];
+        memoryMatches = 0;
+        memoryAttempts = 0;
+        if (memoryMatchesEl) memoryMatchesEl.textContent = "0";
+        if (memoryAttemptsEl) memoryAttemptsEl.textContent = "0";
+        if (memoryTotalEl) memoryTotalEl.textContent = memoryPairs.length;
+        memoryBoard.innerHTML = "";
+        memoryCards.forEach((card, idx) => {
+          const cardEl = document.createElement("div");
+          cardEl.className = "memory-card";
+          cardEl.dataset.index = idx;
+          cardEl.dataset.value = card.icon;
+          cardEl.innerHTML = `
+            <div class="memory-card-inner">
+              <div class="memory-card-front">?</div>
+              <div class="memory-card-back" aria-label="${card.label}">
+                <div style="font-size:26px;">${card.icon}</div>
+                <div style="font-size:11px; font-weight:700; margin-top:4px;">${card.label}</div>
+              </div>
+            </div>`;
+          cardEl.addEventListener("click", () => flipMemoryCard(idx));
+          memoryBoard.appendChild(cardEl);
+        });
+      }
+
+      function flipMemoryCard(idx) {
+        const card = document.querySelector(`.memory-card[data-index="${idx}"]`);
+        if (!card || card.classList.contains("flipped") || card.classList.contains("matched")) return;
+        card.classList.add("flipped");
+        memoryFlipped.push(idx);
+        if (memoryFlipped.length === 2) {
+          memoryAttempts += 1;
+          if (memoryAttemptsEl) memoryAttemptsEl.textContent = memoryAttempts;
+          const card1 = document.querySelector(
+            `.memory-card[data-index="${memoryFlipped[0]}"]`
+          );
+          const card2 = document.querySelector(
+            `.memory-card[data-index="${memoryFlipped[1]}"]`
+          );
+          if (
+            card1 &&
+            card2 &&
+            card1.dataset.value === card2.dataset.value
+          ) {
+            card1.classList.add("matched");
+            card2.classList.add("matched");
+            memoryMatches += 1;
+            if (memoryMatchesEl) memoryMatchesEl.textContent = memoryMatches;
+            memoryFlipped = [];
+            if (memoryMatches === memoryPairs.length) {
+              showModal(
+                "🎉 Selesai!",
+                `Kamu mencocokkan semua pasangan dalam ${memoryAttempts} kali coba!`
+              );
+            }
+          } else {
+            setTimeout(() => {
+              memoryFlipped.forEach((i) => {
+                const c = document.querySelector(`.memory-card[data-index="${i}"]`);
+                if (c) c.classList.remove("flipped");
+              });
+              memoryFlipped = [];
+            }, 800);
+          }
+        }
+      }
+
+      function resetMemoryGame() {
+        memoryInitialized = false;
+        buildMemoryBoard();
+      }
+
+      if (memoryResetBtn) {
+        memoryResetBtn.addEventListener("click", resetMemoryGame);
+      }
+
+      // Bonus mini quiz
+      const bonusQuizQuestions = [
+        {
+          question: "Pembakaran kayu adalah reaksi apa?",
+          options: ["Eksoterm", "Endoterm", "Netral"],
+          correct: 0,
+        },
+        {
+          question: "Nilai ΔH untuk reaksi endoterm adalah?",
+          options: ["Negatif", "Positif", "Nol"],
+          correct: 1,
+        },
+        {
+          question: "Suhu sekitar turun pada reaksi apa?",
+          options: ["Eksoterm", "Endoterm", "Keduanya"],
+          correct: 1,
+        },
+        {
+          question: "Mencairkan es adalah contoh reaksi apa?",
+          options: ["Eksoterm", "Endoterm", "Pembakaran"],
+          correct: 1,
+        },
+        {
+          question: "ΔH negatif menunjukkan reaksi apa?",
+          options: ["Endoterm", "Eksoterm", "Seimbang"],
+          correct: 1,
+        },
+      ];
+      let bonusQuizScore = 0;
+      let bonusQuizAnswered = 0;
+      let bonusQuizBuilt = false;
+
+      function initBonusQuiz() {
+        const container = document.getElementById("quiz-content");
+        if (!container || bonusQuizBuilt) return;
+        bonusQuizBuilt = true;
+        bonusQuizScore = 0;
+        bonusQuizAnswered = 0;
+        container.innerHTML = "";
+        bonusQuizQuestions.forEach((q, idx) => {
+          const qDiv = document.createElement("div");
+          qDiv.style.marginBottom = "16px";
+          qDiv.innerHTML = `
+            <div style="background: #fff; border: 2px solid #18121e; border-radius: 12px; padding: 12px; margin-bottom: 8px;">
+              <strong>${idx + 1}. ${q.question}</strong>
+            </div>
+          `;
+          q.options.forEach((opt, optIdx) => {
+            const optBtn = document.createElement("div");
+            optBtn.className = "quiz-option";
+            optBtn.textContent = opt;
+            optBtn.addEventListener("click", () =>
+              answerBonusQuiz(idx, optIdx, optBtn)
+            );
+            qDiv.appendChild(optBtn);
+          });
+          container.appendChild(qDiv);
+        });
+        const scoreDiv = document.createElement("div");
+        scoreDiv.id = "quiz-score-display";
+        scoreDiv.style.textAlign = "center";
+        scoreDiv.style.marginTop = "16px";
+        scoreDiv.innerHTML =
+          '<strong>Skor: <span class="quiz-score">0</span>/5</strong>';
+        container.appendChild(scoreDiv);
+      }
+
+      function answerBonusQuiz(qIdx, optIdx, element) {
+        if (element.classList.contains("correct") || element.classList.contains("wrong")) return;
+        const question = bonusQuizQuestions[qIdx];
+        if (!question) return;
+        if (optIdx === question.correct) {
+          element.classList.add("correct");
+          bonusQuizScore += 1;
+        } else {
+          element.classList.add("wrong");
+        }
+        bonusQuizAnswered += 1;
+        const scoreEl = document.querySelector(".quiz-score");
+        if (scoreEl) scoreEl.textContent = bonusQuizScore;
+        if (bonusQuizAnswered === bonusQuizQuestions.length) {
+          setTimeout(() => {
+            showModal(
+              "Quiz Selesai!",
+              `Kamu menjawab ${bonusQuizScore} dari ${bonusQuizQuestions.length} soal dengan benar!`
+            );
+          }, 400);
+        }
+      }
+
+      function resetBonusQuiz() {
+        const container = document.getElementById("quiz-content");
+        if (!container) return;
+        container.innerHTML = "";
+        bonusQuizBuilt = false;
+        bonusQuizScore = 0;
+        bonusQuizAnswered = 0;
+        initBonusQuiz();
+      }
+
+      const bonusQuizReset = document.getElementById("bonus-quiz-reset");
+      if (bonusQuizReset) {
+        bonusQuizReset.addEventListener("click", resetBonusQuiz);
+      }
+
+      // Tabs handler
+      function showBonusTab(tabName) {
+        bonusTabContents.forEach((tab) => {
+          tab.style.display = "none";
+          tab.classList.remove("active");
+        });
+        bonusTabButtons.forEach((btn) => btn.classList.remove("active"));
+        const target = document.getElementById(`tab-${tabName}`);
+        const btn = document.querySelector(
+          `#tambahan .tab-btn[data-tab="${tabName}"]`
+        );
+        if (target) {
+          target.style.display = "block";
+          target.classList.add("active");
+        }
+        if (btn) btn.classList.add("active");
+        if (tabName === "memory") {
+          buildMemoryBoard();
+        }
+        if (tabName === "quiz") {
+          initBonusQuiz();
+        }
+      }
+
+      if (bonusTabButtons.length) {
+        showBonusTab("flashcards");
+        bonusTabButtons.forEach((btn) => {
+          btn.addEventListener("click", () => showBonusTab(btn.dataset.tab));
+        });
+      }

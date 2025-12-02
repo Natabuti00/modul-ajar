@@ -402,66 +402,267 @@
   </section>
 
   <section class="section" id="tambahan">
-    <div class="pill-label">🧰 Materi Tambahan - Bonus Belajar</div>
-      <div class="extras-grid">
-        <div class="flashcard" aria-label="flashcard eksoterm">
-          <div class="flash-inner">
-            <div class="flash-face" style="background: #ffe7d9">Eksoterm</div>
-            <div class="flash-face back">
-              &Delta;H negatif, panas keluar, contoh: pembakaran lilin
+    <div class="card">
+      <div class="pill-label">&#129504; Materi Tambahan - Bonus Belajar Interaktif</div>
+      <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+        <button class="tab-btn active" data-tab="flashcards">📇 Flashcards</button>
+        <button class="tab-btn" data-tab="organizer">🗂️ Graphic Organizer</button>
+        <button class="tab-btn" data-tab="memory">🎮 Memory Game</button>
+        <button class="tab-btn" data-tab="experiment">🔬 Virtual Lab</button>
+        <button class="tab-btn" data-tab="sentences">📝 Sentence Frames</button>
+        <button class="tab-btn" data-tab="quiz">❓ Mini Quiz</button>
+        <button class="tab-btn" data-tab="wordwall">📚 Word Wall</button>
+      </div>
+
+      <div class="tab-content active" id="tab-flashcards">
+        <h3 style="margin-bottom: 12px;">📇 Kartu Belajar - Klik untuk Balik</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;">
+          <div class="flashcard" style="cursor: pointer; perspective: 1000px;">
+            <div class="flash-inner">
+              <div class="flash-face" style="background: #f7f2d4;">
+                <div style="text-align: center;">
+                  <div style="font-size: 36px; margin-bottom: 8px;">🔥</div>
+                  <strong>Eksoterm</strong>
+                </div>
+              </div>
+              <div class="flash-face back" style="background: #ffe7d9; transform: rotateY(180deg);">
+                <div style="text-align: center; font-size: 14px;">
+                  <strong>Definisi:</strong> Reaksi yg melepas panas<br>
+                  <strong>&Delta;H:</strong> Negatif (-)<br>
+                  <strong>Suhu sekitar:</strong> Naik &#11014;&#65039;<br>
+                  <strong>Contoh:</strong> Pembakaran, netralisasi
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="flashcard" aria-label="flashcard endoterm">
-          <div class="flash-inner">
-            <div class="flash-face" style="background: #e1f3ff">Endoterm</div>
-            <div class="flash-face back">
-              &Delta;H positif, panas masuk, contoh: mencairkan es
+
+          <div class="flashcard" style="cursor: pointer; perspective: 1000px;">
+            <div class="flash-inner">
+              <div class="flash-face" style="background: #e1e7f3;">
+                <div style="text-align: center;">
+                  <div style="font-size: 36px; margin-bottom: 8px;">❄️</div>
+                  <strong>Endoterm</strong>
+                </div>
+              </div>
+              <div class="flash-face back" style="background: #e1f3ff; transform: rotateY(180deg);">
+                <div style="text-align: center; font-size: 14px;">
+                  <strong>Definisi:</strong> Reaksi yg serap panas<br>
+                  <strong>&Delta;H:</strong> Positif (+)<br>
+                  <strong>Suhu sekitar:</strong> Turun &#11015;&#65039;<br>
+                  <strong>Contoh:</strong> Fotosintesis, es mencair
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="card">
-          <h3>Word Wall</h3>
-          <p>
-            Eksoterm &bull; Endoterm &bull; &Delta;H &bull; Diagram Energi
-            &bull; Reaktan &bull; Produk &bull; Panas &bull; Entalpi &bull;
-            Sistem &bull; Lingkungan
-          </p>
-        </div>
-        <div class="card">
-          <h3>Poster Mini</h3>
-          <p>Judul: "Energi Bergerak!"</p>
-          <ul class="info-list">
-            <li>
-              <span class="bubble-icon">E</span> Eksoterm: keluar panas
-            </li>
-            <li>
-              <span class="bubble-icon">N</span> Endoterm: masuk panas
-            </li>
-            <li>
-              <span class="bubble-icon">H</span> &Delta;H negatif /
-              positif
-            </li>
-          </ul>
-        </div>
-        <div class="card">
-          <h3>Langkah Eksperimen Mini</h3>
-          <ol>
-            <li>Siapkan termometer, gelas air, garam, dan lilin.</li>
-            <li>Ukur suhu awal air.</li>
-            <li>Tambahkan garam (endoterm) dan catat penurunan suhu.</li>
-            <li>Panaskan air di atas lilin (eksoterm), catat kenaikan suhu.</li>
-            <li>Gambar diagram energi kedua percobaan.</li>
-          </ol>
-        </div>
-        <div class="card">
-          <h3>Lembar Kerja Cepat</h3>
-          <p>
-            1) Tandai contoh eksoterm dan endoterm di rumah.<br />2) Gambar
-            diagram energi sederhana.<br />3) Tulis chant favoritmu.
-          </p>
+
+          <div class="flashcard" style="cursor: pointer; perspective: 1000px;">
+            <div class="flash-inner">
+              <div class="flash-face" style="background: #e3f2e7;">
+                <div style="text-align: center;">
+                  <div style="font-size: 36px; margin-bottom: 8px;">📊</div>
+                  <strong>Delta H (&Delta;H)</strong>
+                </div>
+              </div>
+              <div class="flash-face back" style="background: #f0ffe3; transform: rotateY(180deg);">
+                <div style="text-align: center; font-size: 14px;">
+                  <strong>Arti:</strong> Perubahan entalpi<br>
+                  <strong>Eksoterm:</strong> &Delta;H &lt; 0<br>
+                  <strong>Endoterm:</strong> &Delta;H &gt; 0<br>
+                  <strong>Satuan:</strong> kJ/mol (kilojoule)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flashcard" style="cursor: pointer; perspective: 1000px;">
+            <div class="flash-inner">
+              <div class="flash-face" style="background: #fff3cd;">
+                <div style="text-align: center;">
+                  <div style="font-size: 36px; margin-bottom: 8px;">⚗️</div>
+                  <strong>Sistem &amp; Lingkungan</strong>
+                </div>
+              </div>
+              <div class="flash-face back" style="background: #fef6d9; transform: rotateY(180deg);">
+                <div style="text-align: center; font-size: 13px;">
+                  <strong>Sistem:</strong> Bagian yg diteliti<br>
+                  <strong>Lingkungan:</strong> Sekelilingnya<br>
+                  Contoh: Reaksi di tabung = sistem, Udara &amp; wadah = lingkungan
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+
+      <div class="tab-content" id="tab-organizer" style="display: none;">
+        <h3 style="margin-bottom: 12px;">🗂️ Peta Konsep - Klik untuk Highlight</h3>
+        <div style="text-align: center; padding: 20px; background: #f8fafc; border-radius: 16px; border: 2px dashed #18121e;">
+          <div style="margin-bottom: 20px;">
+            <div class="organizer-node active" data-concept="reaksi">
+              <strong>&#9883;&#65039; Reaksi Kimia</strong>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin: 30px 0; position: relative;">
+            <div>
+              <div style="font-size: 24px; margin-bottom: 10px;">🔥</div>
+              <div class="organizer-node" data-concept="eksoterm">
+                <strong>EKSOTERM</strong><br>
+                <small>Lepas Panas</small>
+              </div>
+              <div style="margin-top: 10px; font-size: 12px; color: #666;">
+                <div class="organizer-node" data-concept="ekso-delta">&Delta;H &lt; 0 (negatif)</div>
+                <div class="organizer-node" data-concept="ekso-suhu">Suhu &#8593; Naik</div>
+                <div class="organizer-node" data-concept="ekso-energi">Produk lebih rendah</div>
+              </div>
+            </div>
+            <div>
+              <div style="font-size: 24px; margin-bottom: 10px;">❄️</div>
+              <div class="organizer-node" data-concept="endoterm">
+                <strong>ENDOTERM</strong><br>
+                <small>Serap Panas</small>
+              </div>
+              <div style="margin-top: 10px; font-size: 12px; color: #666;">
+                <div class="organizer-node" data-concept="endo-delta">&Delta;H &gt; 0 (positif)</div>
+                <div class="organizer-node" data-concept="endo-suhu">Suhu &#8595; Turun</div>
+                <div class="organizer-node" data-concept="endo-energi">Produk lebih tinggi</div>
+              </div>
+            </div>
+          </div>
+          <div style="background: #fff; border: 2px solid #18121e; border-radius: 12px; padding: 12px; margin-top: 20px;">
+            <strong>&#8505;&#65039; Info Aktif:</strong>
+            <div id="organizer-info" style="margin-top: 8px; font-weight: 700; color: #465c8b;">
+              Klik node di atas untuk melihat informasi detail
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="tab-memory" style="display: none;">
+        <h3 style="margin-bottom: 12px;">🎮 Memory Game - Cari Pasangan!</h3>
+        <div style="background: #f8fafc; padding: 16px; border-radius: 16px; border: 2px solid #18121e;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+            <div>
+              <strong>Kecocokan:</strong>
+              <span id="memory-matches">0</span>/<span id="memory-total">0</span>
+            </div>
+            <div><strong>Coba:</strong> <span id="memory-attempts">0</span></div>
+            <button class="btn primary" style="font-size: 12px; padding: 6px 10px;" id="memory-reset-btn">Reset</button>
+          </div>
+          <div id="memory-board" style="display: flex; flex-wrap: wrap; justify-content: center;"></div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="tab-experiment" style="display: none;">
+        <h3 style="margin-bottom: 12px;">🔬 Laboratorium Virtual - Ikuti Langkah-Langkah</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="card" style="background: #fff3cd; border-color: #eac67a;">
+            <h4 style="color: #18121e; margin-top: 0;">Eksperimen 1: Pembakaran (Eksoterm)</h4>
+            <div class="experiment-step">
+              <div class="step-number">1</div>
+              <div><strong>Persiapan:</strong> Siapkan lilin, korek api, termometer</div>
+            </div>
+            <div class="experiment-step">
+              <div class="step-number">2</div>
+              <div><strong>Ukur:</strong> Catat suhu awal (30 C)</div>
+            </div>
+            <div class="experiment-step">
+              <div class="step-number">3</div>
+              <div><strong>Bakar:</strong> Nyalakan lilin, letakkan termometer di dekat api</div>
+            </div>
+            <div class="experiment-step">
+              <div class="step-number">4</div>
+              <div><strong>Amati:</strong> Suhu naik drastis (60-80 C) ✅</div>
+            </div>
+            <div style="background: #fff; border: 2px solid #18121e; border-radius: 10px; padding: 10px; margin-top: 10px;">
+              <strong>📊 Hasil:</strong> &Delta;H negatif &#8594; Eksoterm ✓
+            </div>
+          </div>
+          <div class="card" style="background: #e1f3ff; border-color: #465c8b;">
+            <h4 style="color: #18121e; margin-top: 0;">Eksperimen 2: Garam di Air (Endoterm)</h4>
+            <div class="experiment-step">
+              <div class="step-number">1</div>
+              <div><strong>Persiapan:</strong> Siapkan garam, air, gelas, termometer</div>
+            </div>
+            <div class="experiment-step">
+              <div class="step-number">2</div>
+              <div><strong>Ukur:</strong> Catat suhu awal (25 C)</div>
+            </div>
+            <div class="experiment-step">
+              <div class="step-number">3</div>
+              <div><strong>Campur:</strong> Masukkan garam ke air, aduk cepat</div>
+            </div>
+            <div class="experiment-step">
+              <div class="step-number">4</div>
+              <div><strong>Amati:</strong> Suhu turun drastis (10-15 C) ❄️</div>
+            </div>
+            <div style="background: #fff; border: 2px solid #18121e; border-radius: 10px; padding: 10px; margin-top: 10px;">
+              <strong>📊 Hasil:</strong> &Delta;H positif &#8594; Endoterm ✓
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="tab-sentences" style="display: none;">
+        <h3 style="margin-bottom: 12px;">📝 Template Kalimat - Tulis Respon Ilmiahmu</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="card">
+            <strong>Mengidentifikasi Reaksi:</strong>
+            <div class="sentence-frame">
+              "Reaksi pembakaran adalah <span style="background: #fff; border-bottom: 2px solid #465c8b; padding: 2px;">reaksi eksoterm</span> karena <span style="background: #fff; border-bottom: 2px solid #465c8b; padding: 2px;">melepaskan panas</span> ke lingkungan."
+            </div>
+            <div style="font-size: 12px; color: #666; margin-top: 8px;">
+              📝 Coba tulis untuk mencairkan es ❄️
+            </div>
+          </div>
+          <div class="card">
+            <strong>Membandingkan Proses:</strong>
+            <div class="sentence-frame">
+              "Perbedaan utama antara eksoterm dan endoterm adalah bahwa eksoterm <span style="background: #fff; border-bottom: 2px solid #465c8b; padding: 2px;">melepas energi</span> sedangkan endoterm <span style="background: #fff; border-bottom: 2px solid #465c8b; padding: 2px;">menyerap energi</span>."
+            </div>
+          </div>
+          <div class="card">
+            <strong>Menjelaskan &Delta;H:</strong>
+            <div class="sentence-frame">
+              "Nilai &Delta;H dalam reaksi kimia menunjukkan <span style="background: #fff; border-bottom: 2px solid #465c8b; padding: 2px;">perubahan entalpi</span>. Jika &Delta;H negatif, berarti <span style="background: #fff; border-bottom: 2px solid #465c8b; padding: 2px;">reaksi eksoterm</span>."
+            </div>
+          </div>
+          <div class="card">
+            <strong>Memprediksi Hasil:</strong>
+            <div class="sentence-frame">
+              "Ketika suhu sekitar <span style="background: #fff; border-bottom: 2px solid #465c8b; padding: 2px;">menurun</span>, dapat diprediksi bahwa reaksi tersebut adalah <span style="background: #fff; border-bottom: 2px solid #465c8b; padding: 2px;">reaksi endoterm</span>."
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="tab-quiz" style="display: none;">
+        <h3 style="margin-bottom: 12px;">❓ Mini Quiz - Uji Pemahamanmu!</h3>
+        <div style="background: #f8fafc; padding: 16px; border-radius: 16px; border: 2px solid #18121e;">
+          <div id="quiz-content"></div>
+          <div style="text-align: center; margin-top: 16px;">
+            <button class="btn primary" id="bonus-quiz-reset">Reset Quiz</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="tab-wordwall" style="display: none;">
+        <h3 style="margin-bottom: 12px;">📚 Word Wall - Kosakata Penting</h3>
+        <div style="background: #f8fafc; padding: 20px; border-radius: 16px; border: 3px dashed #18121e; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+          <span class="pill" style="background: #f7f2d4; font-size: 14px;">⚛️ Reaksi Kimia</span>
+          <span class="pill" style="background: #fff3cd; font-size: 14px;">🔥 Eksoterm</span>
+          <span class="pill" style="background: #e1f3ff; font-size: 14px;">❄️ Endoterm</span>
+          <span class="pill" style="background: #e3f2e7; font-size: 14px;">📊 Delta H (&Delta;H)</span>
+          <span class="pill" style="background: #fff9e6; font-size: 14px;">📈 Entalpi</span>
+          <span class="pill" style="background: #f0e7ff; font-size: 14px;">🌡️ Panas/Kalor</span>
+          <span class="pill" style="background: #e8f7f5; font-size: 14px;">🔀 Reaktan</span>
+          <span class="pill" style="background: #fce4ec; font-size: 14px;">✨ Produk</span>
+          <span class="pill" style="background: #fff0e6; font-size: 14px;">⬆️ Suhu Naik</span>
+          <span class="pill" style="background: #e1f5ff; font-size: 14px;">⬇️ Suhu Turun</span>
+          <span class="pill" style="background: #f3e5f5; font-size: 14px;">🌍 Sistem</span>
+          <span class="pill" style="background: #e0f2f1; font-size: 14px;">🌫️ Lingkungan</span>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- Modal pop-up -->
