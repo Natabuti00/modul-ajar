@@ -536,7 +536,7 @@ function ThermoQuizApp() {
                     type="text"
                     value={info.class}
                     onChange={(e) => handleInfoChange("class", e.target.value)}
-                    placeholder="Contoh: 8B"
+                    placeholder="Contoh: XI IPA 1"
                   />
                 </label>
                 <label>
