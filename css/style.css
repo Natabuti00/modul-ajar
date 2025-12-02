@@ -304,11 +304,12 @@
         background: linear-gradient(90deg, var(--primary), var(--secondary));
         transition: width 0.4s ease;
       }
-      .section {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 32px 18px;
-      }
+    .section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 32px 18px;
+      scroll-margin-top: 110px;
+    }
       .section h2 {
         margin: 0 0 12px;
         font-size: 28px;
@@ -1394,3 +1395,64 @@
     .quiz-option:hover { transform: translateX(4px); }
     .quiz-option.correct { background: #dbead3; border-color: #5f8f4b; }
     .quiz-option.wrong { background: #f0c4b8; border-color: #c0392b; }
+
+    /* Footer */
+    .site-footer {
+      margin-top: 40px;
+      background: linear-gradient(135deg, #f3f7ff, #e8f1ff);
+      border-top: 3px solid #233237;
+      box-shadow: 0 -8px 20px rgba(24, 18, 30, 0.08);
+    }
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px 18px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      align-items: center;
+    }
+    .footer-brand {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-weight: 800;
+      color: #233237;
+    }
+    .footer-brand img {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      border: 2px solid #233237;
+      background: #f7ef6a;
+      padding: 4px;
+    }
+    .footer-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-weight: 800;
+    }
+    .footer-links a {
+      text-decoration: none;
+      color: #233237;
+      padding: 6px 10px;
+      border-radius: 10px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .footer-links a:hover {
+      background: rgba(35, 50, 55, 0.08);
+      color: #111;
+    }
+    .footer-meta {
+      font-weight: 700;
+      color: #2f3542;
+    }
+    .foot-note {
+      font-size: 12px;
+      color: #465c8b;
+      font-weight: 700;
+    }
+    .site-footer {
+      scroll-margin-top: 110px;
+    }
