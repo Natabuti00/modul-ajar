@@ -21,7 +21,7 @@
       <div class="topbar">
         <div class="logo-block">
           <img
-            src="logo-termokimia.png"
+            src="/images/logo-termokimia.png"
             alt="Logo Termokimia Eksoterm Endoterm"
           />
           <span>Termokimia</span>
@@ -316,7 +316,7 @@
             placeholder="tulis positif / negatif"
           />
           <button
-            class="btn primary"
+            class="btn secondary"
             style="margin-top: 8px"
             onclick="checkBlank()"
           >
@@ -339,14 +339,14 @@
               style="flex: 1"
               aria-label="kelompok eksoterm"
             >
-              Kelompokkan ke Eksoterm
+              Eksoterm
             </div>
             <div
               class="drop-zone"
               style="flex: 1; background: #e1e7f3"
               aria-label="kelompok endoterm"
             >
-              Kelompokkan ke Endoterm
+              Endoterm
             </div>
           </div>
           <button class="btn secondary" style="margin-top: 10px" onclick="resetKategori()">
@@ -367,6 +367,13 @@
           katanya. Mereka menggambar grafik energi warna-warni dan membuat
           poster: "Eksoterm = keluar panas, Endoterm = masuk panas".
         </p>
+        <div class="story-illustration">
+          <img
+            src="images/cerita-kimo-luna.png"
+            alt="Cerita Bergambar Kimo &amp; Luna: Eksoterm vs Endoterm"
+            loading="lazy"
+          />
+        </div>
         <div class="questions">
           <button
             onclick="showModal('Cerita', 'Eksperimen logam menyala: eksoterm karena melepas panas.')"
@@ -405,13 +412,12 @@
     <div class="card">
       <div class="pill-label">&#129504; Materi Tambahan - Bonus Belajar Interaktif</div>
       <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
-        <button class="tab-btn active" data-tab="flashcards">📇 Flashcards</button>
-        <button class="tab-btn" data-tab="organizer">🗂️ Graphic Organizer</button>
+        <button class="tab-btn active" data-tab="flashcards">📇  Kartu Belajar</button>
+        <button class="tab-btn" data-tab="organizer">🗂️  Peta Konsep</button>
         <button class="tab-btn" data-tab="memory">🎮 Memory Game</button>
         <button class="tab-btn" data-tab="experiment">🔬 Virtual Lab</button>
-        <button class="tab-btn" data-tab="sentences">📝 Sentence Frames</button>
-        <button class="tab-btn" data-tab="quiz">❓ Mini Quiz</button>
-        <button class="tab-btn" data-tab="wordwall">📚 Word Wall</button>
+        <button class="tab-btn" data-tab="sentences">📝  Template Kalimat </button>
+        <button class="tab-btn" data-tab="wordwall">📚 Kosakata Penting</button>
       </div>
 
       <div class="tab-content active" id="tab-flashcards">
@@ -635,16 +641,6 @@
         </div>
       </div>
 
-      <div class="tab-content" id="tab-quiz" style="display: none;">
-        <h3 style="margin-bottom: 12px;">❓ Mini Quiz - Uji Pemahamanmu!</h3>
-        <div style="background: #f8fafc; padding: 16px; border-radius: 16px; border: 2px solid #18121e;">
-          <div id="quiz-content"></div>
-          <div style="text-align: center; margin-top: 16px;">
-            <button class="btn primary" id="bonus-quiz-reset">Reset Quiz</button>
-          </div>
-        </div>
-      </div>
-
       <div class="tab-content" id="tab-wordwall" style="display: none;">
         <h3 style="margin-bottom: 12px;">📚 Word Wall - Kosakata Penting</h3>
         <div style="background: #f8fafc; padding: 20px; border-radius: 16px; border: 3px dashed #18121e; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
@@ -668,7 +664,7 @@
   <footer class="site-footer">
     <div class="footer-inner">
       <div class="footer-brand">
-        <img src="logo-termokimia.png" alt="Logo Termokimia" />
+        <img src="/images/logo-termokimia.png" alt="Logo Termokimia" />
         <div>
           <strong>Termokimia Interaktif</strong>
           <div class="foot-note">Eksoterm &amp; Endoterm untuk siswa</div>

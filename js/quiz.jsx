@@ -497,7 +497,7 @@ function ThermoQuizApp() {
               setTeacherAuthed(false);
             }}
           >
-            Student Mode
+            Mode Murid
           </button>
           <button
             className="quiz-btn primary"
