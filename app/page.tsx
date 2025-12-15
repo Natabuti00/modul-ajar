@@ -1113,7 +1113,7 @@ export default function HomePage() {
               { key: "memory", label: "Memory Game" },
               { key: "experiment", label: "Virtual Lab" },
               { key: "sentences", label: "Rumus Penting" },
-              { key: "wordwall", label: "Referensi & Glosarium" },
+              { key: "wordwall", label: "Tabel ΔHf° " },
             ].map((tab) => (
               <button
                 key={tab.key}
