@@ -1342,12 +1342,6 @@ th {
   display: none;
 }
 
-.sentence-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 14px;
-}
-
 .experiment-step {
   display: grid;
   grid-template-columns: 60px 1fr;
@@ -2392,4 +2386,84 @@ th {
   background: #e8f1ff;
   font-weight: 800;
   color: #0f2f6a;
+}
+
+/* ===== FIX: Tab container jangan nge-clip konten (biar peta konsep ga kepotong) ===== */
+.card.tabs-card {
+  min-height: unset;   /* override min-height: 230px */
+  overflow: visible;   /* override overflow: hidden */
+}
+
+/* ===== FIX: Organizer responsif di HP ===== */
+@media (max-width: 520px) {
+  .organizer {
+    padding: 14px;
+  }
+
+  .organizer-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin: 18px 0;
+  }
+
+  /* Garis pembatas tengah (yang pakai ::before/::after) matiin di mobile */
+  .organizer-grid::before,
+  .organizer-grid::after {
+    display: none;
+    content: none;
+  }
+
+  .organizer-node {
+    margin: 6px 0;     /* biar gak melebar kepotong */
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* ===== Rumus Penting: desain 1-layer (no card-in-card) ===== */
+.formula-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.formula-card {
+  background: linear-gradient(135deg, #f7fbff, #eef4ff);
+  border: 2px solid #233237;
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 10px 20px rgba(24, 18, 30, 0.10);
+}
+
+.formula-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 900;
+  color: #233237;
+  background: #fff;
+  border: 2px solid #233237;
+  border-radius: 10px;
+  padding: 8px 12px;
+  width: fit-content;
+  margin-bottom: 10px;
+}
+
+.formula-text {
+  font-weight: 800;
+  color: #1a2a45;
+  line-height: 1.6;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px dashed rgba(35, 50, 55, 0.45);
+  border-radius: 12px;
+  padding: 12px;
+  word-break: break-word;
+}
+
+/* Mobile rapihin */
+@media (max-width: 520px) {
+  .formula-grid {
+    grid-template-columns: 1fr;
+  }
 }

@@ -887,7 +887,7 @@ export default function QuizPage() {
         {teacherMode && (
           <section className="quiz-card teacher">
             <h2>Dashboard Guru</h2>
-            {!teacherAuthed && <p>Masuk dengan password untuk melihat hasil.</p>}
+            {!teacherAuthed && <p>Masuk dengan password untuk melihat hasil. (Password : guru123) </p>}
             {teacherAuthed && (
               <>
                 <div className="teacher-toolbar">

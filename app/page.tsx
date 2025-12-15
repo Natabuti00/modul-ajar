@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -140,7 +140,8 @@ const flashcards = [
 ];
 
 const organizerInfo: Record<string, string> = {
-  reaksi: "Reaksi kimia mengubah reaktan menjadi produk dengan perubahan energi.",
+  reaksi:
+    "Reaksi kimia mengubah reaktan menjadi produk dengan perubahan energi.",
   eksoterm: "Eksoterm: melepas panas, Delta H negatif.",
   endoterm: "Endoterm: menyerap panas, Delta H positif.",
   "ekso-delta": "Produk ber-energi lebih rendah (Delta H < 0).",
@@ -252,9 +253,10 @@ export default function HomePage() {
     Record<string, "correct" | "wrong" | null>
   >({});
   const [blankValue, setBlankValue] = useState("");
-  const [blankFeedback, setBlankFeedback] = useState<
-    { text: string; status: "idle" | "correct" | "wrong" }
-  >({ text: "", status: "idle" });
+  const [blankFeedback, setBlankFeedback] = useState<{
+    text: string;
+    status: "idle" | "correct" | "wrong";
+  }>({ text: "", status: "idle" });
   const [assignments, setAssignments] = useState<
     Record<string, "exo" | "endo" | null>
   >(() =>
@@ -264,9 +266,14 @@ export default function HomePage() {
     }, {} as Record<string, "exo" | "endo" | null>)
   );
   const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
-  const [activeNode, setActiveNode] = useState<string>("reaksi");
+  const [activeNode, setActiveNode] = useState<string>("");
   const [activeTab, setActiveTab] = useState<
-    "flashcards" | "organizer" | "memory" | "experiment" | "sentences" | "wordwall"
+    | "flashcards"
+    | "organizer"
+    | "memory"
+    | "experiment"
+    | "sentences"
+    | "wordwall"
   >("flashcards");
   const [memoryCards, setMemoryCards] = useState<MemoryCard[]>([]);
   const [memoryFlipped, setMemoryFlipped] = useState<number[]>([]);
@@ -275,16 +282,22 @@ export default function HomePage() {
   const [labTemp, setLabTemp] = useState(INITIAL_LAB_TEMP);
   const [labTarget, setLabTarget] = useState(INITIAL_LAB_TEMP);
   const [labMode, setLabMode] = useState<"idle" | "exo" | "endo">("idle");
-  const [labTab, setLabTab] = useState<"sim" | "calorimeter" | "enthalpy">("sim");
+  const [labTab, setLabTab] = useState<"sim" | "calorimeter" | "enthalpy">(
+    "sim"
+  );
   const [massWater, setMassWater] = useState("100");
   const [tempChange, setTempChange] = useState("5");
   const [specificHeat, setSpecificHeat] = useState("4.18");
-  const [calResult, setCalResult] = useState<{ qJ: number; qKJ: number; breakdown: string } | null>(
-    null
-  );
+  const [calResult, setCalResult] = useState<{
+    qJ: number;
+    qKJ: number;
+    breakdown: string;
+  } | null>(null);
   const [sumProducts, setSumProducts] = useState("-393.5");
   const [sumReactants, setSumReactants] = useState("0");
-  const [dhResult, setDhResult] = useState<{ dh: number; note: string } | null>(null);
+  const [dhResult, setDhResult] = useState<{ dh: number; note: string } | null>(
+    null
+  );
 
   useEffect(() => {
     document.body.classList.toggle("endo-mode", endoMode);
@@ -317,19 +330,24 @@ export default function HomePage() {
 
   const lessonEnergyLabel = useMemo(() => {
     if (lessonEnergy > 20) return "Endoterm kuat: produk butuh energi tinggi.";
-    if (lessonEnergy < -20) return "Eksoterm kuat: produk lebih rendah energinya.";
+    if (lessonEnergy < -20)
+      return "Eksoterm kuat: produk lebih rendah energinya.";
     return "Sedang: lihat grafik energi.";
   }, [lessonEnergy]);
 
   const labStatus = useMemo(() => {
-    if (labMode === "exo") return "Reaksi eksoterm berlangsung, suhu naik karena panas dilepas.";
-    if (labMode === "endo") return "Reaksi endoterm berlangsung, suhu turun karena panas diserap.";
+    if (labMode === "exo")
+      return "Reaksi eksoterm berlangsung, suhu naik karena panas dilepas.";
+    if (labMode === "endo")
+      return "Reaksi endoterm berlangsung, suhu turun karena panas diserap.";
     return "Klik salah satu reaksi untuk memulai simulasi.";
   }, [labMode]);
 
   const labDeltaNote = useMemo(() => {
-    if (labTemp >= INITIAL_LAB_TEMP + 3) return "ΔH negatif: lingkungan terasa lebih hangat.";
-    if (labTemp <= INITIAL_LAB_TEMP - 3) return "ΔH positif: sistem menyerap energi panas.";
+    if (labTemp >= INITIAL_LAB_TEMP + 3)
+      return "ΔH negatif: lingkungan terasa lebih hangat.";
+    if (labTemp <= INITIAL_LAB_TEMP - 3)
+      return "ΔH positif: sistem menyerap energi panas.";
     return "ΔH mendekati nol: kondisi masih stabil.";
   }, [labTemp]);
 
@@ -373,7 +391,10 @@ export default function HomePage() {
         [zoneId]: { status: "correct", label: "Cocok!" },
       }).filter((s) => s.status === "correct").length;
       if (solved >= dropZones.length) {
-        openModal({ title: "Mantap!", message: "Semua jawaban drag & drop benar." });
+        openModal({
+          title: "Mantap!",
+          message: "Semua jawaban drag & drop benar.",
+        });
       }
     } else {
       setDropState((prev) => ({
@@ -399,7 +420,10 @@ export default function HomePage() {
     );
   }
   function selectChoice(qid: string, correct: boolean) {
-    setChoiceState((prev) => ({ ...prev, [qid]: correct ? "correct" : "wrong" }));
+    setChoiceState((prev) => ({
+      ...prev,
+      [qid]: correct ? "correct" : "wrong",
+    }));
     if (correct) {
       openModal({ title: "Mantap!", message: "Jawabanmu benar." });
     }
@@ -506,7 +530,9 @@ export default function HomePage() {
           if (next.size === memoryPairs.length * 2) {
             openModal({
               title: "Selesai!",
-              message: `Kamu mencocokkan semua pasangan dalam ${memoryAttempts + 1} kali coba!`,
+              message: `Kamu mencocokkan semua pasangan dalam ${
+                memoryAttempts + 1
+              } kali coba!`,
             });
           }
           return next;
@@ -519,13 +545,17 @@ export default function HomePage() {
   function startExotherm() {
     const bump = Math.floor(Math.random() * 7) + 6;
     setLabMode("exo");
-    setLabTarget((prev) => Math.min(MAX_LAB_TEMP, Math.max(prev, labTemp) + bump));
+    setLabTarget((prev) =>
+      Math.min(MAX_LAB_TEMP, Math.max(prev, labTemp) + bump)
+    );
   }
 
   function startEndotherm() {
     const drop = Math.floor(Math.random() * 6) + 5;
     setLabMode("endo");
-    setLabTarget((prev) => Math.max(MIN_LAB_TEMP, Math.min(prev, labTemp) - drop));
+    setLabTarget((prev) =>
+      Math.max(MIN_LAB_TEMP, Math.min(prev, labTemp) - drop)
+    );
   }
 
   function resetLabSim() {
@@ -570,58 +600,67 @@ export default function HomePage() {
     setDhResult({ dh, note });
   }
 
-const quizBanner = (
-  <section className="section" id="quiz-app">
-    <div className="pill-label">📘 Kuis Interaktif Termokimia - Latihan Kelas XI (Eksoterm & Endoterm)</div>
-    <div className="quiz-banner single">
-      <div className="quiz-banner__left">
-        <div className="quiz-badge">Siap Ikut Kuis?</div>
-        <p className="quiz-intro">
-          Uji pemahaman eksoterm vs endoterm, ΔH, dan contoh sehari-hari lewat 15
-          soal interaktif berdurasi 30 menit.
-        </p>
-        <ul className="quiz-stats">
-          <li>
-            <span className="bubble-icon">📘</span>
-            <div>
-              <strong>Topik</strong>
-              <div>Eksoterm & Endoterm</div>
-            </div>
-          </li>
-          <li>
-            <span className="bubble-icon">📝</span>
-            <div>
-              <strong>Jumlah soal</strong>
-              <div>15 pilihan ganda</div>
-            </div>
-          </li>
-          <li>
-            <span className="bubble-icon">🎓</span>
-            <div>
-              <strong>Target</strong>
-              <div>Siswa SMA kelas XI</div>
-            </div>
-          </li>
-          <li>
-            <span className="bubble-icon">⏱️</span>
-            <div>
-              <strong>Durasi</strong>
-              <div>30 menit</div>
-            </div>
-          </li>
-        </ul>
-        <Link className="quiz-btn primary" href="/quiz" style={{ marginTop: 12, minWidth: 140 }}>
-          Mulai Kuis
-        </Link>
+  const quizBanner = (
+    <section className="section" id="quiz-app">
+      <div className="pill-label">
+        📘 Kuis Interaktif Termokimia - Latihan Kelas XI (Eksoterm & Endoterm)
       </div>
-    </div>
-  </section>
-);
+      <div className="quiz-banner single">
+        <div className="quiz-banner__left">
+          <div className="quiz-badge">Siap Ikut Kuis?</div>
+          <p className="quiz-intro">
+            Uji pemahaman eksoterm vs endoterm, ΔH, dan contoh sehari-hari lewat
+            15 soal interaktif berdurasi 30 menit.
+          </p>
+          <ul className="quiz-stats">
+            <li>
+              <span className="bubble-icon">📘</span>
+              <div>
+                <strong>Topik</strong>
+                <div>Eksoterm & Endoterm</div>
+              </div>
+            </li>
+            <li>
+              <span className="bubble-icon">📝</span>
+              <div>
+                <strong>Jumlah soal</strong>
+                <div>15 pilihan ganda</div>
+              </div>
+            </li>
+            <li>
+              <span className="bubble-icon">🎓</span>
+              <div>
+                <strong>Target</strong>
+                <div>Siswa SMA kelas XI</div>
+              </div>
+            </li>
+            <li>
+              <span className="bubble-icon">⏱️</span>
+              <div>
+                <strong>Durasi</strong>
+                <div>30 menit</div>
+              </div>
+            </li>
+          </ul>
+          <Link
+            className="quiz-btn primary"
+            href="/quiz"
+            style={{ marginTop: 12, minWidth: 140 }}
+          >
+            Mulai Kuis
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
   return (
     <div>
       <header>
         <div className="topbar">
-          <button className="logo-block" onClick={() => scrollToSection("home")}>
+          <button
+            className="logo-block"
+            onClick={() => scrollToSection("home")}
+          >
             <Image
               src="/images/logo-termokimia.png"
               alt="Logo Termokimia Eksoterm Endoterm"
@@ -637,7 +676,10 @@ const quizBanner = (
           >
             ☰
           </button>
-          <nav className={classNames("menu-links", menuOpen && "open")} id="menuLinks">
+          <nav
+            className={classNames("menu-links", menuOpen && "open")}
+            id="menuLinks"
+          >
             {navLinks.map((item) => (
               <a
                 key={item.href}
@@ -658,15 +700,27 @@ const quizBanner = (
         <div className="hero-text">
           <div className="badge-age">Kelas XI</div>
           <h1>Termokimia: Eksoterm & Endoterm</h1>
-          <p>Belajar perubahan energi dalam reaksi kimia secara ringan dan interaktif.</p>
+          <p>
+            Belajar perubahan energi dalam reaksi kimia secara ringan dan
+            interaktif.
+          </p>
           <div className="cta-buttons">
-            <button className="btn secondary" onClick={() => scrollToSection("pelajaran")}>
+            <button
+              className="btn secondary"
+              onClick={() => scrollToSection("pelajaran")}
+            >
               Mulai Belajar
             </button>
-            <button className="btn secondary" onClick={() => scrollToSection("aktivitas")}>
+            <button
+              className="btn secondary"
+              onClick={() => scrollToSection("aktivitas")}
+            >
               Coba Aktivitas
             </button>
-            <button className="btn ghost" onClick={() => setEndoMode((v) => !v)}>
+            <button
+              className="btn ghost"
+              onClick={() => setEndoMode((v) => !v)}
+            >
               Mode: {endoMode ? "Endoterm" : "Eksoterm"}
             </button>
           </div>
@@ -684,7 +738,12 @@ const quizBanner = (
               <strong>Endoterm</strong>
               <small>Panas masuk, Delta H positif.</small>
               <div className="meter">
-                <span style={{ width: "30%", background: "linear-gradient(90deg, #93c178, #465c8b)" }} />
+                <span
+                  style={{
+                    width: "30%",
+                    background: "linear-gradient(90deg, #93c178, #465c8b)",
+                  }}
+                />
               </div>
             </div>
             <div className="mini-card">
@@ -703,7 +762,9 @@ const quizBanner = (
       </section>
 
       <section className="section" id="kosakata">
-        <div className="pill-label">📚 Kosakata / Ide Utama - Kenalan Dulu Yuk!</div>
+        <div className="pill-label">
+          📚 Kosakata / Ide Utama - Kenalan Dulu Yuk!
+        </div>
         <div className="cards-grid">
           {vocabCards.map((card) => (
             <div
@@ -718,20 +779,25 @@ const quizBanner = (
               }
             >
               <h3 style={{ textAlign: "center" }}>{card.title}</h3>
-              <p style={{ textAlign: "center", fontWeight: 700 }}>{card.front}</p>
+              <p style={{ textAlign: "center", fontWeight: 700 }}>
+                {card.front}
+              </p>
             </div>
           ))}
         </div>
       </section>
-            <section className="section" id="pelajaran">
-        <div className="pill-label">🧠 Materi Pembelajaran - Eksoterm vs Endoterm</div>
+      <section className="section" id="pelajaran">
+        <div className="pill-label">
+          🧠 Materi Pembelajaran - Eksoterm vs Endoterm
+        </div>
 
         <div className="lesson-hero">
           <div>
             <p className="lesson-kicker">Eksoterm vs Endoterm</p>
             <h2 className="lesson-title">Energi dalam reaksi kimia</h2>
             <p className="lesson-sub">
-              Ringkasan visual tentang arah energi, grafik sederhana, dan contoh sehari-hari.
+              Ringkasan visual tentang arah energi, grafik sederhana, dan contoh
+              sehari-hari.
             </p>
           </div>
           <div className="lesson-stats">
@@ -760,10 +826,12 @@ const quizBanner = (
             <div className="lesson-chip">Diagram</div>
             <div className="diagram-lines">
               <div className="line exo">
-                <div className="dot" /> Eksoterm : Reaktan (tinggi) → Produk (lebih rendah) + panas.
+                <div className="dot" /> Eksoterm : Reaktan (tinggi) → Produk
+                (lebih rendah) + panas.
               </div>
               <div className="line endo">
-                <div className="dot" /> Endoterm : Reaktan + panas → Produk (lebih tinggi).
+                <div className="dot" /> Endoterm : Reaktan + panas → Produk
+                (lebih tinggi).
               </div>
             </div>
             <div className="diagram-pill-row">
@@ -798,7 +866,10 @@ const quizBanner = (
           <div className="energy-note">{lessonEnergyLabel}</div>
         </div>
 
-        <div className="comparison-card" aria-label="perbandingan reaksi eksoterm dan endoterm">
+        <div
+          className="comparison-card"
+          aria-label="perbandingan reaksi eksoterm dan endoterm"
+        >
           <div className="comparison-head">
             <div>Eksoterm</div>
             <div>Endoterm</div>
@@ -819,7 +890,9 @@ const quizBanner = (
       </section>
 
       <section className="section" id="aktivitas">
-        <div className="pill-label">🎮 Aktivitas Interaktif - Ayo Bermain & Belajar</div>
+        <div className="pill-label">
+          🎮 Aktivitas Interaktif - Ayo Bermain & Belajar
+        </div>
         <div className="activities">
           <div className="activity">
             <h3>Drag & Drop</h3>
@@ -830,8 +903,12 @@ const quizBanner = (
                   key={item.id}
                   className="chip"
                   draggable={!chipHidden[item.target]}
-                  onDragStart={(e) => e.dataTransfer.setData("text/plain", item.target)}
-                  style={{ visibility: chipHidden[item.target] ? "hidden" : "visible" }}
+                  onDragStart={(e) =>
+                    e.dataTransfer.setData("text/plain", item.target)
+                  }
+                  style={{
+                    visibility: chipHidden[item.target] ? "hidden" : "visible",
+                  }}
                 >
                   {item.label}
                 </div>
@@ -857,7 +934,11 @@ const quizBanner = (
                 </div>
               ))}
             </div>
-            <button className="btn secondary" style={{ marginTop: 10 }} onClick={resetDrag}>
+            <button
+              className="btn secondary"
+              style={{ marginTop: 10 }}
+              onClick={resetDrag}
+            >
               Reset Jawaban
             </button>
           </div>
@@ -872,7 +953,9 @@ const quizBanner = (
                     <button
                       key={opt.label}
                       className={classNames(
-                        choiceState[q.id] === "correct" && opt.correct && "correct",
+                        choiceState[q.id] === "correct" &&
+                          opt.correct &&
+                          "correct",
                         choiceState[q.id] === "wrong" && !opt.correct && "wrong"
                       )}
                       onClick={() => selectChoice(q.id, opt.correct)}
@@ -898,10 +981,16 @@ const quizBanner = (
               )}
               placeholder="tulis positif / negatif"
             />
-            <button className="btn secondary" style={{ marginTop: 8 }} onClick={checkBlank}>
+            <button
+              className="btn secondary"
+              style={{ marginTop: 8 }}
+              onClick={checkBlank}
+            >
               Cek Jawaban
             </button>
-            <div style={{ marginTop: 8, fontWeight: 700 }}>{blankFeedback.text}</div>
+            <div style={{ marginTop: 8, fontWeight: 700 }}>
+              {blankFeedback.text}
+            </div>
           </div>
 
           <div className="activity">
@@ -936,7 +1025,10 @@ const quizBanner = (
                   "Eksoterm"
                 )}
               </div>
-              <div className="drop-zone soft-blue" aria-label="kelompok endoterm">
+              <div
+                className="drop-zone soft-blue"
+                aria-label="kelompok endoterm"
+              >
                 {endoList.length ? (
                   <>
                     <div className="label">Endoterm:</div>
@@ -951,7 +1043,11 @@ const quizBanner = (
                 )}
               </div>
             </div>
-            <button className="btn secondary" style={{ marginTop: 10 }} onClick={resetCategory}>
+            <button
+              className="btn secondary"
+              style={{ marginTop: 10 }}
+              onClick={resetCategory}
+            >
               Reset Kategori
             </button>
           </div>
@@ -962,8 +1058,9 @@ const quizBanner = (
         <div className="pill-label"> 📖 Cerita Bergambar</div>
         <div className="story-box">
           <p style={{ fontWeight: 800 }}>
-            Petualangan Thermo & Chem di Dunia Energi: buka pintu Eksoterm dan Endoterm, rasakan
-            perpindahan panas, pahami ΔH, dan lihat contoh nyata.
+            Petualangan Thermo & Chem di Dunia Energi: buka pintu Eksoterm dan
+            Endoterm, rasakan perpindahan panas, pahami ΔH, dan lihat contoh
+            nyata.
           </p>
           <div className="story-actions">
             <button
@@ -982,7 +1079,9 @@ const quizBanner = (
               onClick={() =>
                 openModal({
                   title: "Pertanyaan untuk Siswa",
-                  message: thermoQuestions.map((q, i) => `${i + 1}. ${q}`).join("\n\n"),
+                  message: thermoQuestions
+                    .map((q, i) => `${i + 1}. ${q}`)
+                    .join("\n\n"),
                 })
               }
             >
@@ -1003,7 +1102,9 @@ const quizBanner = (
       {quizBanner}
 
       <section className="section" id="tambahan">
-        <div className="pill-label">🧠 Materi Tambahan - Bonus Belajar Interaktif</div>
+        <div className="pill-label">
+          🧠 Materi Tambahan - Bonus Belajar Interaktif
+        </div>
         <div className="card">
           <div className="tabs-row">
             {[
@@ -1016,7 +1117,10 @@ const quizBanner = (
             ].map((tab) => (
               <button
                 key={tab.key}
-                className={classNames("tab-btn", activeTab === tab.key && "active")}
+                className={classNames(
+                  "tab-btn",
+                  activeTab === tab.key && "active"
+                )}
                 onClick={() =>
                   setActiveTab(
                     tab.key as
@@ -1039,11 +1143,22 @@ const quizBanner = (
               <h3>Kartu Belajar - Klik untuk Balik</h3>
               <div className="flash-grid">
                 {flashcards.map((card) => (
-                  <div key={card.id} className="flashcard" onClick={() => toggleFlashcard(card.id)}>
-                    <div className={classNames("flash-inner", flippedCards[card.id] && "flip")}>
+                  <div
+                    key={card.id}
+                    className="flashcard"
+                    onClick={() => toggleFlashcard(card.id)}
+                  >
+                    <div
+                      className={classNames(
+                        "flash-inner",
+                        flippedCards[card.id] && "flip"
+                      )}
+                    >
                       <div className="flash-face">
                         <div style={{ textAlign: "center" }}>
-                          <div style={{ fontSize: 28, marginBottom: 8 }}>{card.icon}</div>
+                          <div style={{ fontSize: 28, marginBottom: 8 }}>
+                            {card.icon}
+                          </div>
                           <strong>{card.title}</strong>
                         </div>
                       </div>
@@ -1070,7 +1185,6 @@ const quizBanner = (
                   <div>
                     <div
                       className="organizer-node"
-                      onMouseEnter={() => setActiveNode("eksoterm")}
                       onClick={() => setActiveNode("eksoterm")}
                     >
                       EKSOTERM
@@ -1081,7 +1195,6 @@ const quizBanner = (
                           "organizer-node",
                           activeNode === "ekso-delta" && "active"
                         )}
-                        onMouseEnter={() => setActiveNode("ekso-delta")}
                         onClick={() => setActiveNode("ekso-delta")}
                       >
                         Delta H &lt; 0
@@ -1091,7 +1204,6 @@ const quizBanner = (
                           "organizer-node",
                           activeNode === "ekso-suhu" && "active"
                         )}
-                        onMouseEnter={() => setActiveNode("ekso-suhu")}
                         onClick={() => setActiveNode("ekso-suhu")}
                       >
                         Suhu Naik
@@ -1101,7 +1213,6 @@ const quizBanner = (
                           "organizer-node",
                           activeNode === "ekso-energi" && "active"
                         )}
-                        onMouseEnter={() => setActiveNode("ekso-energi")}
                         onClick={() => setActiveNode("ekso-energi")}
                       >
                         Produk Energi Rendah
@@ -1111,7 +1222,6 @@ const quizBanner = (
                   <div>
                     <div
                       className="organizer-node"
-                      onMouseEnter={() => setActiveNode("endoterm")}
                       onClick={() => setActiveNode("endoterm")}
                     >
                       ENDOTERM
@@ -1122,7 +1232,6 @@ const quizBanner = (
                           "organizer-node",
                           activeNode === "endo-delta" && "active"
                         )}
-                        onMouseEnter={() => setActiveNode("endo-delta")}
                         onClick={() => setActiveNode("endo-delta")}
                       >
                         Delta H &gt; 0
@@ -1132,7 +1241,6 @@ const quizBanner = (
                           "organizer-node",
                           activeNode === "endo-suhu" && "active"
                         )}
-                        onMouseEnter={() => setActiveNode("endo-suhu")}
                         onClick={() => setActiveNode("endo-suhu")}
                       >
                         Suhu turun → Delta H positif.
@@ -1142,7 +1250,6 @@ const quizBanner = (
                           "organizer-node",
                           activeNode === "endo-energi" && "active"
                         )}
-                        onMouseEnter={() => setActiveNode("endo-energi")}
                         onClick={() => setActiveNode("endo-energi")}
                       >
                         Produk Energi Tinggi
@@ -1152,8 +1259,9 @@ const quizBanner = (
                 </div>
                 <div className="organizer-info">
                   <strong>Info:</strong>{" "}
-                  {organizerInfo[activeNode] ||
-                    "Klik node di atas untuk melihat informasi detail."}
+                  {activeNode
+                    ? organizerInfo[activeNode]
+                    : "Klik node di atas untuk melihat informasi detail."}
                 </div>
               </div>
             </div>
@@ -1165,7 +1273,8 @@ const quizBanner = (
               <div className="memory-shell">
                 <div className="memory-meta">
                   <div>
-                    <strong>Kecocokan:</strong> {memoryMatched.size / 2}/{memoryPairs.length}
+                    <strong>Kecocokan:</strong> {memoryMatched.size / 2}/
+                    {memoryPairs.length}
                   </div>
                   <div>
                     <strong>Coba:</strong> {memoryAttempts}
@@ -1176,7 +1285,8 @@ const quizBanner = (
                 </div>
                 <div id="memory-board">
                   {memoryCards.map((card, idx) => {
-                    const flipped = memoryFlipped.includes(idx) || memoryMatched.has(idx);
+                    const flipped =
+                      memoryFlipped.includes(idx) || memoryMatched.has(idx);
                     return (
                       <div
                         key={card.id}
@@ -1189,9 +1299,18 @@ const quizBanner = (
                       >
                         <div className="memory-card-inner">
                           <div className="memory-card-front">?</div>
-                          <div className="memory-card-back" aria-label={card.label}>
+                          <div
+                            className="memory-card-back"
+                            aria-label={card.label}
+                          >
                             <div style={{ fontSize: 24 }}>{card.icon}</div>
-                            <div style={{ fontSize: 12, fontWeight: 700, marginTop: 4 }}>
+                            <div
+                              style={{
+                                fontSize: 12,
+                                fontWeight: 700,
+                                marginTop: 4,
+                              }}
+                            >
                               {card.label}
                             </div>
                           </div>
@@ -1216,7 +1335,10 @@ const quizBanner = (
                   ].map((tab) => (
                     <button
                       key={tab.key}
-                      className={classNames("lab-subtab", labTab === tab.key && "active")}
+                      className={classNames(
+                        "lab-subtab",
+                        labTab === tab.key && "active"
+                      )}
                       onClick={() => setLabTab(tab.key as typeof labTab)}
                     >
                       {tab.label}
@@ -1229,29 +1351,45 @@ const quizBanner = (
                     <div className="lab-sim-card">
                       <div className="lab-sim-head">
                         <div className="lab-tag">Simulasi Reaksi</div>
-                        <div className="lab-sub">Eksplor suhu saat reaksi eksoterm dan endoterm.</div>
+                        <div className="lab-sub">
+                          Eksplor suhu saat reaksi eksoterm dan endoterm.
+                        </div>
                       </div>
                       <div className="lab-actions">
                         <button
-                          className={classNames("lab-action-btn", "exo", labMode === "exo" && "active")}
+                          className={classNames(
+                            "lab-action-btn",
+                            "exo",
+                            labMode === "exo" && "active"
+                          )}
                           onClick={startExotherm}
                         >
                           Reaksi Eksoterm
                         </button>
                         <button
-                          className={classNames("lab-action-btn", "endo", labMode === "endo" && "active")}
+                          className={classNames(
+                            "lab-action-btn",
+                            "endo",
+                            labMode === "endo" && "active"
+                          )}
                           onClick={startEndotherm}
                         >
                           Reaksi Endoterm
                         </button>
-                        <button className="lab-action-btn ghost" onClick={resetLabSim}>
+                        <button
+                          className="lab-action-btn ghost"
+                          onClick={resetLabSim}
+                        >
                           Reset
                         </button>
                       </div>
                       <div className="lab-sim-body">
                         <div className="thermo-wrap">
                           <div className="thermo-track">
-                            <div className="thermo-mercury" style={{ height: `${labFill}%` }} />
+                            <div
+                              className="thermo-mercury"
+                              style={{ height: `${labFill}%` }}
+                            />
                             <div className="thermo-bulb" />
                           </div>
                           <div className="thermo-scale">
@@ -1261,7 +1399,9 @@ const quizBanner = (
                           </div>
                         </div>
                         <div className="lab-readout">
-                          <div className="lab-temp">{Math.round(labTemp)}°C</div>
+                          <div className="lab-temp">
+                            {Math.round(labTemp)}°C
+                          </div>
                           <div
                             className={classNames(
                               "lab-status-line",
@@ -1272,7 +1412,9 @@ const quizBanner = (
                             {labStatus}
                           </div>
                           <div className="lab-delta">{labDeltaNote}</div>
-                          <div className="lab-target">Target suhu: {Math.round(labTarget)}°C</div>
+                          <div className="lab-target">
+                            Target suhu: {Math.round(labTarget)}°C
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -1283,7 +1425,9 @@ const quizBanner = (
                   <div className="lab-panel">
                     <div className="lab-panel-head">
                       <div className="lab-tag">Kalorimeter Virtual</div>
-                      <div className="lab-sub">Masukkan data untuk menghitung kalor reaksi.</div>
+                      <div className="lab-sub">
+                        Masukkan data untuk menghitung kalor reaksi.
+                      </div>
                     </div>
                     <div className="calo-grid">
                       <label className="lab-field">
@@ -1314,17 +1458,24 @@ const quizBanner = (
                         />
                       </label>
                     </div>
-                    <button className="lab-form-btn" onClick={calculateCalorimeter}>
+                    <button
+                      className="lab-form-btn"
+                      onClick={calculateCalorimeter}
+                    >
                       Hitung Kalor
                     </button>
                     {calResult && (
                       <div className="lab-result-box">
-                        <div className="lab-result-title">Hasil Perhitungan:</div>
+                        <div className="lab-result-title">
+                          Hasil Perhitungan:
+                        </div>
                         <div className="lab-formula">{calResult.breakdown}</div>
                         <div className="lab-result-highlight">
                           q = {calResult.qJ.toFixed(2)} Joule
                         </div>
-                        <div className="lab-note">atau {calResult.qKJ.toFixed(2)} kJ</div>
+                        <div className="lab-note">
+                          atau {calResult.qKJ.toFixed(2)} kJ
+                        </div>
                       </div>
                     )}
                   </div>
@@ -1334,7 +1485,9 @@ const quizBanner = (
                   <div className="lab-panel">
                     <div className="lab-panel-head">
                       <div className="lab-tag">Kalkulator Entalpi</div>
-                      <div className="lab-sub">Hitung ΔH reaksi dari entalpi pembentukan.</div>
+                      <div className="lab-sub">
+                        Hitung ΔH reaksi dari entalpi pembentukan.
+                      </div>
                     </div>
                     <div className="calo-grid">
                       <label className="lab-field">
@@ -1361,8 +1514,12 @@ const quizBanner = (
                     </button>
                     {dhResult && (
                       <div className="lab-result-box">
-                        <div className="lab-result-title">Hasil Perhitungan:</div>
-                        <div className="lab-formula">ΔH = ΣΔHf produk - ΣΔHf reaktan</div>
+                        <div className="lab-result-title">
+                          Hasil Perhitungan:
+                        </div>
+                        <div className="lab-formula">
+                          ΔH = ΣΔHf produk - ΣΔHf reaktan
+                        </div>
                         <div className="lab-result-highlight">
                           ΔH = {dhResult.dh.toFixed(2)} kJ/mol
                         </div>
@@ -1374,13 +1531,14 @@ const quizBanner = (
               </div>
             </div>
           )}
-{activeTab === "sentences" && (
+          {activeTab === "sentences" && (
             <div className="tab-content active animate-in" id="tab-sentences">
               <h3>Rumus Penting</h3>
-              <div className="sentence-grid">
+              <div className="formula-grid">
                 {sentenceTemplates.map((text) => (
-                  <div className="card" key={text}>
-                    <div className="sentence-frame">{text}</div>
+                  <div className="formula-card" key={text}>
+                    <div className="formula-title">Rumus</div>
+                    <div className="formula-text">{text}</div>
                   </div>
                 ))}
               </div>
@@ -1434,7 +1592,9 @@ const quizBanner = (
           </div>
           <div className="footer-meta">
             <div>Kontak: natasyarachmawati6@gmail.com</div>
-            <div className="foot-note">Didesain untuk belajar mandiri dan kelas.</div>
+            <div className="foot-note">
+              Didesain untuk belajar mandiri dan kelas.
+            </div>
           </div>
         </div>
       </footer>
@@ -1445,13 +1605,15 @@ const quizBanner = (
             <h3>{modal.title}</h3>
             <p>{modal.message}</p>
             <div className="quiz-modal-actions">
-              {(modal.actions || [
-                {
-                  label: "Tutup",
-                  variant: "primary" as const,
-                  onClick: closeModal,
-                },
-              ]).map((action) => (
+              {(
+                modal.actions || [
+                  {
+                    label: "Tutup",
+                    variant: "primary" as const,
+                    onClick: closeModal,
+                  },
+                ]
+              ).map((action) => (
                 <button
                   key={action.label}
                   className={classNames(
