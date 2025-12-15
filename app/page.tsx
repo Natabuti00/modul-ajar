@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -199,6 +199,10 @@ const enthalpyTable = [
   { name: "Kalsium karbonat", formula: "CaCO3(s)", dhf: "-1206.9" },
 ];
 
+const INITIAL_LAB_TEMP = 27;
+const MIN_LAB_TEMP = 8;
+const MAX_LAB_TEMP = 72;
+
 const thermoStoryFull = `Petualangan Thermo & Chem di Dunia Energi
 
 Di sebuah laboratorium ajaib yang penuh dengan tabung reaksi berwarna-warni dan alat-alat kimia yang berkilauan, hiduplah dua sahabat yang tak terpisahkan: Thermo si robot pengukur suhu dengan termometer digital yang selalu menempel di dadanya, dan Chem si kelinci ilmuwan yang selalu mengenakan jas lab putih dan kacamata bulat. Mereka berdua memiliki misi khusus yang sangat penting - menjelajahi dunia reaksi kimia untuk memahami misteri perpindahan energi yang selama ini menjadi teka-teki bagi banyak orang.
@@ -268,6 +272,19 @@ export default function HomePage() {
   const [memoryFlipped, setMemoryFlipped] = useState<number[]>([]);
   const [memoryMatched, setMemoryMatched] = useState<Set<number>>(new Set());
   const [memoryAttempts, setMemoryAttempts] = useState(0);
+  const [labTemp, setLabTemp] = useState(INITIAL_LAB_TEMP);
+  const [labTarget, setLabTarget] = useState(INITIAL_LAB_TEMP);
+  const [labMode, setLabMode] = useState<"idle" | "exo" | "endo">("idle");
+  const [labTab, setLabTab] = useState<"sim" | "calorimeter" | "enthalpy">("sim");
+  const [massWater, setMassWater] = useState("100");
+  const [tempChange, setTempChange] = useState("5");
+  const [specificHeat, setSpecificHeat] = useState("4.18");
+  const [calResult, setCalResult] = useState<{ qJ: number; qKJ: number; breakdown: string } | null>(
+    null
+  );
+  const [sumProducts, setSumProducts] = useState("-393.5");
+  const [sumReactants, setSumReactants] = useState("0");
+  const [dhResult, setDhResult] = useState<{ dh: number; note: string } | null>(null);
 
   useEffect(() => {
     document.body.classList.toggle("endo-mode", endoMode);
@@ -280,6 +297,18 @@ export default function HomePage() {
     }
   }, [activeTab]);
 
+  useEffect(() => {
+    if (labTemp === labTarget) return;
+    const timer = window.setTimeout(() => {
+      setLabTemp((prev) => {
+        if (prev < labTarget) return Math.min(prev + 1, labTarget);
+        if (prev > labTarget) return Math.max(prev - 1, labTarget);
+        return prev;
+      });
+    }, 220);
+    return () => window.clearTimeout(timer);
+  }, [labTemp, labTarget]);
+
   const energyLabel = useMemo(() => {
     if (energy > 10) return "Endoterm: butuh panas dari sekitar.";
     if (energy < -10) return "Eksoterm: melepas panas ke sekitar.";
@@ -291,6 +320,24 @@ export default function HomePage() {
     if (lessonEnergy < -20) return "Eksoterm kuat: produk lebih rendah energinya.";
     return "Sedang: lihat grafik energi.";
   }, [lessonEnergy]);
+
+  const labStatus = useMemo(() => {
+    if (labMode === "exo") return "Reaksi eksoterm berlangsung, suhu naik karena panas dilepas.";
+    if (labMode === "endo") return "Reaksi endoterm berlangsung, suhu turun karena panas diserap.";
+    return "Klik salah satu reaksi untuk memulai simulasi.";
+  }, [labMode]);
+
+  const labDeltaNote = useMemo(() => {
+    if (labTemp >= INITIAL_LAB_TEMP + 3) return "ΔH negatif: lingkungan terasa lebih hangat.";
+    if (labTemp <= INITIAL_LAB_TEMP - 3) return "ΔH positif: sistem menyerap energi panas.";
+    return "ΔH mendekati nol: kondisi masih stabil.";
+  }, [labTemp]);
+
+  const labFill = useMemo(() => {
+    const range = MAX_LAB_TEMP - MIN_LAB_TEMP;
+    const percent = ((labTemp - MIN_LAB_TEMP) / range) * 100;
+    return Math.max(6, Math.min(100, percent));
+  }, [labTemp]);
 
   const exoList = categoryItems
     .filter((item) => assignments[item.label] === "exo")
@@ -467,6 +514,60 @@ export default function HomePage() {
       }
       setTimeout(() => setMemoryFlipped([]), 650);
     }
+  }
+
+  function startExotherm() {
+    const bump = Math.floor(Math.random() * 7) + 6;
+    setLabMode("exo");
+    setLabTarget((prev) => Math.min(MAX_LAB_TEMP, Math.max(prev, labTemp) + bump));
+  }
+
+  function startEndotherm() {
+    const drop = Math.floor(Math.random() * 6) + 5;
+    setLabMode("endo");
+    setLabTarget((prev) => Math.max(MIN_LAB_TEMP, Math.min(prev, labTemp) - drop));
+  }
+
+  function resetLabSim() {
+    setLabMode("idle");
+    setLabTemp(INITIAL_LAB_TEMP);
+    setLabTarget(INITIAL_LAB_TEMP);
+  }
+
+  function calculateCalorimeter() {
+    const m = parseFloat(massWater);
+    const delta = parseFloat(tempChange);
+    const c = parseFloat(specificHeat);
+    if (Number.isNaN(m) || Number.isNaN(delta) || Number.isNaN(c)) {
+      openModal({
+        title: "Input belum lengkap",
+        message: "Isi massa air, perubahan suhu, dan kalor jenis dengan angka.",
+      });
+      return;
+    }
+    const qJ = m * c * delta;
+    setCalResult({
+      qJ,
+      qKJ: qJ / 1000,
+      breakdown: `q = ${m} g × ${c} J/g°C × ${delta}°C`,
+    });
+  }
+
+  function calculateDeltaH() {
+    const prod = parseFloat(sumProducts);
+    const react = parseFloat(sumReactants);
+    if (Number.isNaN(prod) || Number.isNaN(react)) {
+      openModal({
+        title: "Input belum lengkap",
+        message: "Isi ΣΔHf produk dan ΣΔHf reaktan dengan angka.",
+      });
+      return;
+    }
+    const dh = prod - react;
+    let note = "Reaksi berada di titik seimbang energi.";
+    if (dh < 0) note = "Reaksi eksoterm (melepaskan kalor).";
+    if (dh > 0) note = "Reaksi endoterm (menyerap kalor).";
+    setDhResult({ dh, note });
   }
 
 const quizBanner = (
@@ -1106,26 +1207,177 @@ const quizBanner = (
           {activeTab === "experiment" && (
             <div className="tab-content active animate-in" id="tab-experiment">
               <h3>Laboratorium Virtual</h3>
-              <div className="experiment-grid">
-                {experiments.map((exp) => (
-                  <div key={exp.title} className="card">
-                    <h4 style={{ marginTop: 0 }}>{exp.title}</h4>
-                    {exp.steps.map((step, idx) => (
-                      <div className="experiment-step" key={step}>
-                        <div className="step-number">{idx + 1}</div>
-                        <div>{step}</div>
+              <div className="lab-shell">
+                <div className="lab-subtabs">
+                  {[
+                    { key: "sim", label: "Simulasi Reaksi" },
+                    { key: "calorimeter", label: "Kalorimeter" },
+                    { key: "enthalpy", label: "Kalkulator Entalpi" },
+                  ].map((tab) => (
+                    <button
+                      key={tab.key}
+                      className={classNames("lab-subtab", labTab === tab.key && "active")}
+                      onClick={() => setLabTab(tab.key as typeof labTab)}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+
+                {labTab === "sim" && (
+                  <div className="lab-sim-grid single">
+                    <div className="lab-sim-card">
+                      <div className="lab-sim-head">
+                        <div className="lab-tag">Simulasi Reaksi</div>
+                        <div className="lab-sub">Eksplor suhu saat reaksi eksoterm dan endoterm.</div>
                       </div>
-                    ))}
+                      <div className="lab-actions">
+                        <button
+                          className={classNames("lab-action-btn", "exo", labMode === "exo" && "active")}
+                          onClick={startExotherm}
+                        >
+                          Reaksi Eksoterm
+                        </button>
+                        <button
+                          className={classNames("lab-action-btn", "endo", labMode === "endo" && "active")}
+                          onClick={startEndotherm}
+                        >
+                          Reaksi Endoterm
+                        </button>
+                        <button className="lab-action-btn ghost" onClick={resetLabSim}>
+                          Reset
+                        </button>
+                      </div>
+                      <div className="lab-sim-body">
+                        <div className="thermo-wrap">
+                          <div className="thermo-track">
+                            <div className="thermo-mercury" style={{ height: `${labFill}%` }} />
+                            <div className="thermo-bulb" />
+                          </div>
+                          <div className="thermo-scale">
+                            <div>{MAX_LAB_TEMP}°C</div>
+                            <div>{INITIAL_LAB_TEMP}°C</div>
+                            <div>{MIN_LAB_TEMP}°C</div>
+                          </div>
+                        </div>
+                        <div className="lab-readout">
+                          <div className="lab-temp">{Math.round(labTemp)}°C</div>
+                          <div
+                            className={classNames(
+                              "lab-status-line",
+                              labMode === "exo" && "exo",
+                              labMode === "endo" && "endo"
+                            )}
+                          >
+                            {labStatus}
+                          </div>
+                          <div className="lab-delta">{labDeltaNote}</div>
+                          <div className="lab-target">Target suhu: {Math.round(labTarget)}°C</div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                ))}
+                )}
+
+                {labTab === "calorimeter" && (
+                  <div className="lab-panel">
+                    <div className="lab-panel-head">
+                      <div className="lab-tag">Kalorimeter Virtual</div>
+                      <div className="lab-sub">Masukkan data untuk menghitung kalor reaksi.</div>
+                    </div>
+                    <div className="calo-grid">
+                      <label className="lab-field">
+                        <span>Massa air (gram):</span>
+                        <input
+                          className="lab-input"
+                          type="number"
+                          value={massWater}
+                          onChange={(e) => setMassWater(e.target.value)}
+                        />
+                      </label>
+                      <label className="lab-field">
+                        <span>Perubahan suhu (°C):</span>
+                        <input
+                          className="lab-input"
+                          type="number"
+                          value={tempChange}
+                          onChange={(e) => setTempChange(e.target.value)}
+                        />
+                      </label>
+                      <label className="lab-field">
+                        <span>Kalor jenis air (J/g°C):</span>
+                        <input
+                          className="lab-input"
+                          type="number"
+                          value={specificHeat}
+                          onChange={(e) => setSpecificHeat(e.target.value)}
+                        />
+                      </label>
+                    </div>
+                    <button className="lab-form-btn" onClick={calculateCalorimeter}>
+                      Hitung Kalor
+                    </button>
+                    {calResult && (
+                      <div className="lab-result-box">
+                        <div className="lab-result-title">Hasil Perhitungan:</div>
+                        <div className="lab-formula">{calResult.breakdown}</div>
+                        <div className="lab-result-highlight">
+                          q = {calResult.qJ.toFixed(2)} Joule
+                        </div>
+                        <div className="lab-note">atau {calResult.qKJ.toFixed(2)} kJ</div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {labTab === "enthalpy" && (
+                  <div className="lab-panel">
+                    <div className="lab-panel-head">
+                      <div className="lab-tag">Kalkulator Entalpi</div>
+                      <div className="lab-sub">Hitung ΔH reaksi dari entalpi pembentukan.</div>
+                    </div>
+                    <div className="calo-grid">
+                      <label className="lab-field">
+                        <span>ΣΔHf produk (kJ/mol):</span>
+                        <input
+                          className="lab-input"
+                          type="number"
+                          value={sumProducts}
+                          onChange={(e) => setSumProducts(e.target.value)}
+                        />
+                      </label>
+                      <label className="lab-field">
+                        <span>ΣΔHf reaktan (kJ/mol):</span>
+                        <input
+                          className="lab-input"
+                          type="number"
+                          value={sumReactants}
+                          onChange={(e) => setSumReactants(e.target.value)}
+                        />
+                      </label>
+                    </div>
+                    <button className="lab-form-btn" onClick={calculateDeltaH}>
+                      Hitung ΔH
+                    </button>
+                    {dhResult && (
+                      <div className="lab-result-box">
+                        <div className="lab-result-title">Hasil Perhitungan:</div>
+                        <div className="lab-formula">ΔH = ΣΔHf produk - ΣΔHf reaktan</div>
+                        <div className="lab-result-highlight">
+                          ΔH = {dhResult.dh.toFixed(2)} kJ/mol
+                        </div>
+                        <div className="lab-note">{dhResult.note}</div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           )}
-
-          {activeTab === "sentences" && (
+{activeTab === "sentences" && (
             <div className="tab-content active animate-in" id="tab-sentences">
               <h3>Rumus Penting</h3>
-              <div className="experiment-grid">
+              <div className="sentence-grid">
                 {sentenceTemplates.map((text) => (
                   <div className="card" key={text}>
                     <div className="sentence-frame">{text}</div>
