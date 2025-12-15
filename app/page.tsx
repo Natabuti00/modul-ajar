@@ -182,22 +182,21 @@ const experiments = [
 ];
 
 const sentenceTemplates = [
-  "Reaksi pembakaran adalah eksoterm karena melepaskan panas ke lingkungan.",
-  "Endoterm menyerap energi sehingga suhu sekitar menurun.",
-  "Delta H negatif menandakan energi keluar dari sistem.",
-  "Delta H positif berarti sistem mengambil energi.",
+  "Perubahan Entalpi (ΔH): ΔH = H_produk - H_reaktan",
+  "Kalor Reaksi: q = m × c × ΔT (m = massa, c = kalor jenis, ΔT = perubahan suhu)",
+  "Hukum Hess: ΔH_reaksi = ΣΔHf produk - ΣΔHf reaktan",
+  "Energi Ikatan: ΔH = Σ Energi ikatan putus - Σ Energi ikatan terbentuk",
 ];
 
-const wordWall = [
-  "Reaksi Kimia",
-  "Eksoterm",
-  "Endoterm",
-  "Delta H",
-  "Panas/Kalor",
-  "Reaktan",
-  "Produk",
-  "Sistem",
-  "Lingkungan",
+const enthalpyTable = [
+  { name: "Air", formula: "H2O(l)", dhf: "-285.8" },
+  { name: "Karbon dioksida", formula: "CO2(g)", dhf: "-393.5" },
+  { name: "Metana", formula: "CH4(g)", dhf: "-74.8" },
+  { name: "Amonia", formula: "NH3(g)", dhf: "-46.1" },
+  { name: "Etanol", formula: "C2H5OH(l)", dhf: "-277.7" },
+  { name: "Glukosa", formula: "C6H12O6(s)", dhf: "-1273.3" },
+  { name: "Natrium klorida", formula: "NaCl(s)", dhf: "-411.2" },
+  { name: "Kalsium karbonat", formula: "CaCO3(s)", dhf: "-1206.9" },
 ];
 
 const thermoStoryFull = `Petualangan Thermo & Chem di Dunia Energi
@@ -510,7 +509,7 @@ const quizBanner = (
             </div>
           </li>
         </ul>
-        <Link className="quiz-btn primary" href="/quiz" style={{ marginTop: 12, minWidth: 180 }}>
+        <Link className="quiz-btn primary" href="/quiz" style={{ marginTop: 12, minWidth: 140 }}>
           Mulai Kuis
         </Link>
       </div>
@@ -606,23 +605,19 @@ const quizBanner = (
         <div className="pill-label">📚 Kosakata / Ide Utama - Kenalan Dulu Yuk!</div>
         <div className="cards-grid">
           {vocabCards.map((card) => (
-            <div key={card.id} className="card flip-card">
-              <div
-                className={classNames("flip-inner", flippedCards[card.id] && "flip")}
-                onClick={() => setFlippedCards((prev) => ({ ...prev, [card.id]: !prev[card.id] }))}
-              >
-                <div className="flip-face">
-                  <h3>{card.title}</h3>
-                  <p>{card.front}</p>
-                </div>
-                <div className="flip-face back">
-                  <ul style={{ listStyleType: "disc", textAlign: "left" }}>
-                    {card.back.map((line) => (
-                      <li key={line}>{line}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
+            <div
+              key={card.id}
+              className="card"
+              style={{ cursor: "pointer" }}
+              onClick={() =>
+                openModal({
+                  title: card.title,
+                  message: card.back.join("\n"),
+                })
+              }
+            >
+              <h3 style={{ textAlign: "center" }}>{card.title}</h3>
+              <p style={{ textAlign: "center", fontWeight: 700 }}>{card.front}</p>
             </div>
           ))}
         </div>
@@ -664,10 +659,10 @@ const quizBanner = (
             <div className="lesson-chip">Diagram</div>
             <div className="diagram-lines">
               <div className="line exo">
-                <div className="dot" /> Reaktan (tinggi) → Produk (lebih rendah) + panas.
+                <div className="dot" /> Eksoterm : Reaktan (tinggi) → Produk (lebih rendah) + panas.
               </div>
               <div className="line endo">
-                <div className="dot" /> Reaktan + panas → Produk (lebih tinggi).
+                <div className="dot" /> Endoterm : Reaktan + panas → Produk (lebih tinggi).
               </div>
             </div>
             <div className="diagram-pill-row">
@@ -915,8 +910,8 @@ const quizBanner = (
               { key: "organizer", label: "Peta Konsep" },
               { key: "memory", label: "Memory Game" },
               { key: "experiment", label: "Virtual Lab" },
-              { key: "sentences", label: "Template Kalimat" },
-              { key: "wordwall", label: "Word Wall" },
+              { key: "sentences", label: "Rumus Penting" },
+              { key: "wordwall", label: "Referensi & Glosarium" },
             ].map((tab) => (
               <button
                 key={tab.key}
@@ -1129,7 +1124,7 @@ const quizBanner = (
 
           {activeTab === "sentences" && (
             <div className="tab-content active animate-in" id="tab-sentences">
-              <h3>Template Kalimat</h3>
+              <h3>Rumus Penting</h3>
               <div className="experiment-grid">
                 {sentenceTemplates.map((text) => (
                   <div className="card" key={text}>
@@ -1142,13 +1137,22 @@ const quizBanner = (
 
           {activeTab === "wordwall" && (
             <div className="tab-content active animate-in" id="tab-wordwall">
-              <h3>Word Wall</h3>
-              <div className="word-wall">
-                {wordWall.map((term) => (
-                  <span className="pill" key={term}>
-                    {term}
-                  </span>
-                ))}
+              <h3>Tabel Entalpi Pembentukan Standar (ΔHf°)</h3>
+              <div className="ref-card">
+                <div className="ref-table">
+                  <div className="ref-head">
+                    <div>Senyawa</div>
+                    <div>Rumus</div>
+                    <div>ΔHf° (kJ/mol)</div>
+                  </div>
+                  {enthalpyTable.map((row) => (
+                    <div className="ref-row" key={row.name}>
+                      <div>{row.name}</div>
+                      <div>{row.formula}</div>
+                      <div>{row.dhf}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}
