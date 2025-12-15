@@ -1131,6 +1131,31 @@ th {
   background: #f0f4ff;
 }
 
+/* Vocab card accents */
+.cards-grid .card:nth-child(1) .flash-face {
+  background: linear-gradient(135deg, #fff6db, #fff0c7);
+}
+
+.cards-grid .card:nth-child(2) .flash-face {
+  background: linear-gradient(135deg, #e7eefc, #dbe7ff);
+}
+
+.cards-grid .card:nth-child(3) .flash-face {
+  background: linear-gradient(135deg, #eaf8f0, #dff3e8);
+}
+
+.cards-grid .card:nth-child(1) .flash-face.back {
+  background: linear-gradient(180deg, #fff3d9, #fffaf0);
+}
+
+.cards-grid .card:nth-child(2) .flash-face.back {
+  background: linear-gradient(180deg, #e9f0ff, #f5f8ff);
+}
+
+.cards-grid .card:nth-child(3) .flash-face.back {
+  background: linear-gradient(180deg, #eaf7f0, #f7fbf9);
+}
+
 .organizer {
   text-align: center;
   padding: 24px;
